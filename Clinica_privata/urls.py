@@ -26,7 +26,7 @@ from Clinica.views import pagina_iniziale, evento_pagina_iniziale, area_privata,
     lista_cartelle_personale, elimina_cartella_clinica, crea_cartella_clinica, visualizza_cartella_paziente, \
     visualizza_eventi_paziente, iscrizione_evento_paziente, annulla_iscrizione_evento_paziente, \
     visualizza_prenotazioni_paziente, annulla_prenotazione, crea_prenotazione, crea_recensione, visualizza_recensioni, \
-    recensioni_utenti, conferma_visita, visualizza_prenotazioni_personale
+    recensioni_utenti, conferma_visita, visualizza_prenotazioni_personale, annulla_conferma_visita
 
 urlpatterns = [
    # path('admin/', admin.site.urls),
@@ -68,6 +68,8 @@ urlpatterns = [
     path('crea_recensione/', crea_recensione, name='crea_recensione'),
     path('conferma_visita/<int:prenotazione_id>/', conferma_visita, name='conferma_visita'),
     path('appuntamenti/', visualizza_prenotazioni_personale, name='visualizza_prenotazioni_personale'),
+    path('annulla_conferma_visita/<int:prenotazione_id>/', annulla_conferma_visita, name='annulla_conferma_visita'),
+
 
 
 

@@ -7,7 +7,7 @@ from django.contrib import messages
 from django.views.decorators.http import require_POST
 
 from Clinica.models import Evento, Paziente, Personale, Amministratore_Clinica, Trattamento, Iscrizione, \
-    Cartella_Clinica, Gestione, Prenotazione, Recensione
+    Cartella_Clinica, Gestione, Prenotazione, Recensione, Svolgimento
 
 
 #PAGINA INIZIALE
@@ -919,14 +919,38 @@ def conferma_visita(request, prenotazione_id):
     personale = get_object_or_404(Personale, email=request.session['personale_email'])
     prenotazione = get_object_or_404(Prenotazione, id=prenotazione_id, personale=personale)
 
-    if prenotazione.stato != Prenotazione.Stato.CONFERMATA:
+    if not prenotazione.trattamento:
+        messages.error(request, "Prenotazione senza trattamento associato.")
+        return redirect('visualizza_prenotazioni_personale')
+
+    trattamento = prenotazione.trattamento
+
+    if request.method == 'POST':
+        # Aggiorna i campi modificabili del trattamento
+        trattamento.note = request.POST.get('note', trattamento.note)
+        trattamento.data_inizio = request.POST.get('data_inizio', trattamento.data_inizio) or None
+        trattamento.data_fine = request.POST.get('data_fine', trattamento.data_fine) or None
+        trattamento.stanza = request.POST.get('stanza', trattamento.stanza)
+        durata = request.POST.get('durata')
+        trattamento.durata = int(durata) if durata and durata.isdigit() else trattamento.durata
+        trattamento.save()
+
+        # Conferma prenotazione
         prenotazione.stato = Prenotazione.Stato.CONFERMATA
         prenotazione.save()
-        messages.success(request, "Visita confermata come eseguita.")
-    else:
-        messages.info(request, "La visita è già stata confermata.")
 
-    return redirect('visualizza_prenotazioni_personale')
+        # Crea svolgimento solo se non esiste già
+        if not Svolgimento.objects.filter(personale=personale, trattamento=trattamento).exists():
+            Svolgimento.objects.create(personale=personale, trattamento=trattamento)
+
+        messages.success(request, "Visita confermata e trattamento aggiornato.")
+        return redirect('visualizza_prenotazioni_personale')
+
+    # GET: mostra form con i dati correnti del trattamento
+    return render(request, 'conferma_visita.html', {
+        'prenotazione': prenotazione,
+        'trattamento': trattamento,
+    })
 
 
 #VISUALIZZA PRENOTAZIONI PERSONALE
@@ -943,3 +967,25 @@ def visualizza_prenotazioni_personale(request):
         'personale': personale,
         'prenotazioni': prenotazioni
     })
+
+
+#ANNULLA PRENOTAZIONE PERSONALE
+def annulla_conferma_visita(request, prenotazione_id):
+    if 'personale_email' not in request.session:
+        return redirect('login_personale')
+
+    personale = get_object_or_404(Personale, email=request.session['personale_email'])
+    prenotazione = get_object_or_404(Prenotazione, id=prenotazione_id, personale=personale)
+
+    if prenotazione.stato == Prenotazione.Stato.CONFERMATA:
+        prenotazione.stato = Prenotazione.Stato.RICHIESTA  # o lo stato iniziale che usi
+        prenotazione.save()
+
+        # Se vuoi, elimina anche lo svolgimento associato
+        Svolgimento.objects.filter(personale=personale, trattamento=prenotazione.trattamento).delete()
+
+        messages.success(request, "Conferma della visita annullata.")
+    else:
+        messages.info(request, "La visita non è confermata, quindi non può essere annullata.")
+
+    return redirect('visualizza_prenotazioni_personale')

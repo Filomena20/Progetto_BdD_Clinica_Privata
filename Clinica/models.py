@@ -95,7 +95,7 @@ class Prenotazione(models.Model):
         RICHIESTA = 'richiesta', 'Richiesta'
         CONFERMATA = 'confermata', 'Confermata'
         CANCELLATA = 'cancellata', 'Cancellata'
-        MODIFICATA = 'modificata', 'Modificata'
+        #MODIFICATA = 'modificata', 'Modificata'
 
     data = models.DateField()
     ora = models.TimeField()

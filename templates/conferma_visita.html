@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+
+{% block title %}Conferma Visita{% endblock %}
+
+{% block content %}
+<br/>
+<br/>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <a href="{% url 'visualizza_prenotazioni_personale' %}" class="text-decoration-none text-reset">⭠ Indietro</a>
+    <a href="{% url 'logout_personale' %}" class="btn btn-custom mx-2">Logout</a>
+</div>
+
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+
+                <div class="container mt-4">
+                  <h2>Conferma Visita per {{ prenotazione.paziente.nome }} {{ prenotazione.paziente.cognome }}</h2>
+                  <form method="post" action="{% url 'conferma_visita' prenotazione.id %} ">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                      <label for="note" class="form-label">Note</label>
+                      <textarea id="note" name="note" class="form-control">{{ trattamento.note }}</textarea>
+                    </div>
+
+                    {% if trattamento.tipo == "Ricovero" %}
+                      <h4>Dettagli Ricovero</h4>
+                      <div class="mb-3">
+                        <label for="data_inizio" class="form-label">Data Inizio</label>
+                        <input type="date" id="data_inizio" name="data_inizio" class="form-control" value="{{ trattamento.data_inizio|date:'Y-m-d' }}">
+                      </div>
+                      <div class="mb-3">
+                        <label for="data_fine" class="form-label">Data Fine</label>
+                        <input type="date" id="data_fine" name="data_fine" class="form-control" value="{{ trattamento.data_fine|date:'Y-m-d' }}">
+                      </div>
+                      <div class="mb-3">
+                        <label for="stanza" class="form-label">Stanza</label>
+                        <input type="text" id="stanza" name="stanza" class="form-control" value="{{ trattamento.stanza }}">
+                      </div>
+                    {% elif trattamento.tipo == "Riabilitazione" %}
+                      <h4>Dettagli Riabilitazione</h4>
+                      <div class="mb-3">
+                        <label for="durata" class="form-label">Durata (giorni)</label>
+                        <input type="number" id="durata" name="durata" class="form-control" value="{{ trattamento.durata }}">
+                      </div>
+                    {% endif %}
+                    <div class="d-flex justify-content-center">
+                      <button type="submit" class="btn btn-custom mx-2">Conferma Visita</button>
+                         <a href="{% url 'visualizza_prenotazioni_personale' %}" class="btn btn-secondary">Annulla</a>
+                    </div>
+
+                  </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
