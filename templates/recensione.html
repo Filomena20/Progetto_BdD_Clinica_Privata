@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block title %}Recensisci un Trattamento{% endblock %}
+
+{% block content %}
+<br/>
+<div class="clinic-logo-text d-flex justify-content-between align-items-center">
+    <a href="{% url 'trattamenti_recensiti' %}" class="text-decoration-none text-reset">&larr; Indietro</a>
+    <a href="{% url 'logout_paziente' %}" class="btn btn-custom mx-2">Logout</a>
+</div>
+<br/>
+<div class="row justify-content-center">
+    <div class="card shadow-sm">
+      <div class="card-body">
+
+        <h1>Recensisci un Trattamento</h1>
+
+        {% if messages %}
+          {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+          {% endfor %}
+        {% endif %}
+
+        {% if trattamenti %}
+          <form method="post" action="{% url 'crea_recensione' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+              <label for="trattamento_id" class="form-label">Seleziona Trattamento da recensire</label>
+              <select id="trattamento_id" name="trattamento_id" class="form-select" required>
+                <option value="" disabled selected>-- Seleziona --</option>
+                {% for trattamento in trattamenti %}
+                  <option value="{{ trattamento.id }}">{{ trattamento.nome }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <div class="mb-3">
+              <label for="voto" class="form-label">Valutazione (1-5)</label>
+              <input type="number" id="voto" name="voto" min="1" max="5" class="form-control" required>
+            </div>
+
+            <div class="mb-3">
+              <label for="commento" class="form-label">Commento</label>
+              <textarea id="commento" name="commento" class="form-control" rows="4" required></textarea>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Invia Recensione</button>
+          </form>
+        {% else %}
+         <p>Non ci sono trattamenti da recensire.</p>
+        {% endif %}
+      </div>
+    </div>
+</div>
+{% endblock %}

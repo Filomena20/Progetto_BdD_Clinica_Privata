@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Le mie Prenotazioni{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Prenotazioni Assegnate</h2>
+    <a href="{% url 'logout_personale' %}" class="btn btn-secondary">Logout</a>
+  </div>
+
+  {% if prenotazioni %}
+    <table class="table table-bordered table-hover">
+      <thead class="table-light">
+          <tr>
+            <th>Data</th>
+            <th>Ora</th>
+            <th>Paziente</th>
+            <th>Trattamento</th>
+            <th>Stato</th>
+            <th>Azioni</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in prenotazioni %}
+            <tr>
+              <td>{{ p.data|date:"d/m/Y" }}</td>
+              <td>{{ p.ora|time:"H:i" }}</td>
+              <td>{{ p.paziente.nome }} {{ p.paziente.cognome }}</td>
+              <td>{{ p.trattamento.nome }}</td>
+              <td>{{ p.get_stato_display }}</td>
+              <td>
+                  {% if p.stato == "richiesta" %}
+                    <a href="{% url 'conferma_visita' p.id %}" class="btn btn-success btn-sm">Conferma</a>
+                  {% elif p.stato == "eseguita" %}
+                    <span class="text-success">Eseguita</span>
+                  {% else %}
+                    <span class="text-muted">{{ p.get_stato_display }}</span>
+                  {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+    </table>
+  {% else %}
+    <div class="alert alert-info">Non ci sono prenotazioni assegnate al momento.</div>
+  {% endif %}
+</div>
+{% endblock %}

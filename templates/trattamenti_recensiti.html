@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Le Tue Recensioni{% endblock %}
+
+{% block content %}
+<br/>
+<div class="clinic-logo-text d-flex justify-content-between align-items-center">
+    <a href="{% url 'area_riservata_paziente' %}" class="text-decoration-none text-reset">⭠ Indietro</a>
+    <a href="{% url 'logout_paziente' %}" class="btn btn-custom mx-2">Logout</a>
+</div>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h1>Le Tue Recensioni</h1>
+
+                {% if recensioni %}
+                  <div class="list-group">
+                    {% for recensione in recensioni %}
+                      <div class="list-group-item mb-3">
+                        <h5>{{ recensione.trattamento.nome }}</h5>
+                        <p>
+                          Valutazione:
+                          {% for i in "12345" %}
+                            {% if forloop.counter <= recensione.valutazione %}
+                              <span style="color: gold;">&#9733;</span> {# stella piena #}
+                            {% else %}
+                              <span style="color: lightgray;">&#9733;</span> {# stella vuota #}
+                            {% endif %}
+                          {% endfor %}
+                        </p>
+                        <p>{{ recensione.testo }}</p>
+                      </div>
+                    {% endfor %}
+                  </div>
+                {% else %}
+                  <p>Non hai ancora scritto recensioni.</p>
+                {% endif %}
+            </div>
+        </div>
+            <div class="text-center mt-4">
+                <a href="{% url 'crea_recensione' %}" class="btn btn-custom mx-2">Nuova Recensione</a>
+            </div>
+    </div>
+</div>
+
+<br/>
+
+{% endblock %}

@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Le tue Prenotazioni{% endblock %}
+
+{% block content %}
+<br/>
+<div class="clinic-logo-text d-flex justify-content-between align-items-center">
+    <a href="{% url 'area_riservata_paziente' %}" class="text-decoration-none text-reset">⭠ Indietro</a>
+    <a href="{% url 'logout_paziente' %}" class="btn btn-custom mx-2">Logout</a>
+</div>
+
+<div class="container my-5">
+    <h2 class="text-center mb-4">Le tue prenotazioni attive</h2>
+
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            {% if prenotazioni %}
+            <table class="table table-striped table-bordered text-center">
+                <thead class="table-light">
+                    <tr>
+                        <th>Trattamento</th>
+                        <th>Data</th>
+                        <th>Ora</th>
+                        <th>Durata (minuti)</th>
+                        <th>Stato</th>
+                        <th>Azioni</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for prenotazione in prenotazioni %}
+                    <tr>
+                        <td>{{ prenotazione.trattamento.nome }}</td>
+                        <td>{{ prenotazione.data }}</td>
+                        <td>{{ prenotazione.ora }}</td>
+                        <td>{{ prenotazione.durata }}</td>
+                        <td>{{ prenotazione.get_stato_display }}</td>
+                        <td>
+                            <form method="post" action="{% url 'annulla_prenotazione' prenotazione.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Sei sicuro di voler annullare questa prenotazione?')">Annulla</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p class="text-center">Non hai prenotazioni attive.</p>
+            {% endif %}
+
+            <div class="text-center mt-4">
+                <a href="{% url 'crea_prenotazione' %}" class="btn btn-custom mx-2">Nuova Prenotazione</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

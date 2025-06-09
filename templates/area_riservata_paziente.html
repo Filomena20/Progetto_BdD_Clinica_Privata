@@ -12,7 +12,7 @@
 
 <div class='row justify-content-center'>
     <div class="col-md-6 text-center">
-        <p class="fs-4"> BENVENUTO/A {{ paziente.nome }} </p>
+        <p class="fs-4"> BENVENUTO/A {{ paziente.nome }} {{ paziente.cognome }} </p>
     </div>
 </div>
 
@@ -23,7 +23,7 @@
             <div class="card-body">
                 <h3 class="card-title">Cartella clinica</h3>
                 <p class="card-text">Clicca per consultare la tua cartella clinica</p>
-                <a href="{% url 'cartella_clinica' %}" class="btn btn-custom mx-2">Apri</a>
+                <a href="{%  url 'visualizza_cartella_paziente' %}" class="btn btn-custom mx-2">Apri</a>
             </div>
         </div>
     </div>
@@ -33,9 +33,25 @@
             <div class="card-body">
                 <h3 class="card-title">Eventi</h3>
                 <p class="card-text">Clicca per iscriverti a un evento</p>
-                <a  href="{% url 'visualizza_eventi' %}" class="btn btn-custom mx-2">Visualizza Eventi</a>
-
-
+                <a  href="{%  url 'visualizza_eventi_paziente' %}" class="btn btn-custom mx-2">Visualizza Eventi</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h3 class="card-title">Prenotazioni</h3>
+                <p class="card-text">Clicca per consultare la tue prenotazioni </p>
+                <a href="{% url 'visualizza_prenotazioni_paziente' %}" class="btn btn-custom mx-2">Apri</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-12 col-md-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h3 class="card-title">Recensioni</h3>
+                <p class="card-text">Clicca per consultare la tua recensioni o per recensire un trattamento</p>
+                <a href="{% url 'trattamenti_recensiti' %}" class="btn btn-custom mx-2">Apri</a>
             </div>
         </div>
     </div>

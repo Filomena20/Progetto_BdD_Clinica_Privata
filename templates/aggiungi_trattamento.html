@@ -1,17 +1,20 @@
 {% extends "base.html" %}
 
-{% block title %}Area Riservata Amministratore{% endblock %}
+{% block title %}Aggiungi Trattamento Amministratore{% endblock %}
 
 {% block content %}
 <br/>
 <div class="clinic-logo-text">
-    <a href="{% url 'lista_trattamenti' %}" class="text-decoration-none text-reset">⭠ Indietro</a>
+    <a href="{% url 'lista_trattamenti_amministratore' %}" class="text-decoration-none text-reset">⭠ Indietro</a>
     <a href="{% url 'logout_amministratore' %}" class="btn btn-custom mx-2 float-end">Logout</a>
 </div>
 <br/>
 
 <div class="row justify-content-center">
     <div class="col-md-8 col-lg-6">
+
+
+
         <div class="card shadow-sm">
             <div class="card-body">
                 <h2 class="card-title text-center mb-4">Aggiungi Trattamento</h2>
@@ -19,21 +22,24 @@
                 {% if error %}
                 <div class="alert alert-danger">{{ error }}</div>
                 {% endif %}
-
-                <form method="post">
+                 <!-- Form per scegliere il tipo con GET -->
+                <form method="get" action="{% url 'aggiungi_trattamento_amministratore' %}" class="mb-4">
+                    <label for="tipo" class="form-label">Tipo:</label>
+                    <select id="tipo" name="tipo" class="form-select" onchange="this.form.submit()">
+                        <option value="Ricovero" {% if tipo == "Ricovero" %}selected{% endif %}>Ricovero</option>
+                        <option value="Riabilitazione" {% if tipo == "Riabilitazione" %}selected{% endif %}>Riabilitazione</option>
+                    </select>
+                </form>
+                <!-- Form principale POST -->
+                <form method="post" action="{% url 'aggiungi_trattamento_amministratore' %}">
                     {% csrf_token %}
+
+                    <!-- Mando tipo come hidden per conservarlo nel POST -->
+                    <input type="hidden" name="tipo" value="{{ tipo }}">
 
                     <div class="mb-3">
                         <label for="nome" class="form-label">Nome:</label>
                         <input id="nome" type="text" name="nome" class="form-control" required value="{{ nome|default:'' }}">
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="tipo" class="form-label">Tipo:</label>
-                        <select id="tipo" name="tipo" class="form-select" onchange="toggleCampi(this.value)" required>
-                            <option value="Ricovero" {% if tipo == "Ricovero" %}selected{% endif %}>Ricovero</option>
-                            <option value="Riabilitazione" {% if tipo == "Riabilitazione" %}selected{% endif %}>Riabilitazione</option>
-                        </select>
                     </div>
 
                     <div class="mb-3">
@@ -46,7 +52,9 @@
                         <textarea id="note" name="note" class="form-control">{{ note|default:'' }}</textarea>
                     </div>
 
-                    <div id="campi_ricovero" style="display:none;">
+                    <!-- Campi specifici a seconda del tipo -->
+                    {% if tipo == "Ricovero" %}
+                    <div id="campi_ricovero">
                         <h5>Campi Ricovero</h5>
                         <div class="mb-3">
                             <label for="data_inizio" class="form-label">Data Inizio:</label>
@@ -61,14 +69,15 @@
                             <input id="stanza" type="text" name="stanza" class="form-control" value="{{ stanza|default:'' }}">
                         </div>
                     </div>
-
-                    <div id="campi_riabilitazione" style="display:none;">
+                    {% elif tipo == "Riabilitazione" %}
+                    <div id="campi_riabilitazione">
                         <h5>Campi Riabilitazione</h5>
                         <div class="mb-3">
                             <label for="durata" class="form-label">Durata (giorni):</label>
                             <input id="durata" type="number" name="durata" class="form-control" value="{{ durata|default:'' }}">
                         </div>
                     </div>
+                    {% endif %}
 
                     <div class="d-grid">
                         <button type="submit" name="aggiungi" class="btn btn-custom">Aggiungi</button>
@@ -78,15 +87,5 @@
         </div>
     </div>
 </div>
-
-<script>
-    function toggleCampi(tipo) {
-        document.getElementById('campi_ricovero').style.display = (tipo === 'Ricovero') ? 'block' : 'none';
-        document.getElementById('campi_riabilitazione').style.display = (tipo === 'Riabilitazione') ? 'block' : 'none';
-    }
-
-    const tipoSelect = document.querySelector('select[name="tipo"]');
-    if (tipoSelect) toggleCampi(tipoSelect.value);
-</script>
 
 {% endblock %}

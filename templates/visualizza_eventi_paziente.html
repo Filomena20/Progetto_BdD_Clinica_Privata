@@ -7,8 +7,8 @@
 <br/>
 
 <div class="clinic-logo-text d-flex justify-content-between align-items-center">
-    <a href="{% url 'area_riservata_personale' %}" class="text-decoration-none text-reset">⭠ Indietro</a>
-    <a href="{% url 'logout_personale' %}" class="btn btn-custom mx-2">Logout</a>
+    <a href="{% url 'area_riservata_paziente' %}" class="text-decoration-none text-reset">⭠ Indietro</a>
+    <a href="{% url 'logout_paziente' %}" class="btn btn-custom mx-2">Logout</a>
 </div>
 
 <h1 class="text-center my-4">Eventi</h1>
@@ -32,16 +32,16 @@
       <td>{{ evento.descrizione }}</td>
       <td>{{ evento.presenze_effettive }}</td>
       <td>
-          {% if request.session.personale_email %}
+          {% if request.session.paziente_email %}
             {% if evento.id in iscrizioni %}
               <!-- Già iscritto → mostra bottone per annullare -->
-              <form method="post" action="{% url 'annulla_iscrizione_evento_personale' evento.id %}">
+              <form method="post" action="{% url 'annulla_iscrizione_evento_paziente' evento.id %}">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-danger btn-sm">Annulla iscrizione</button>
               </form>
             {% else %}
               <!-- Non iscritto → mostra bottone per iscriversi -->
-              <form method="post" action="{% url 'iscrizione_evento_personale' evento.id %}">
+              <form method="post" action="{% url 'iscrizione_evento_paziente' evento.id %}">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-success btn-sm">Iscriviti</button>
               </form>

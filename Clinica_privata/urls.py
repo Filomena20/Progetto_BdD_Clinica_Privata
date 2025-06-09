@@ -17,62 +17,63 @@ Including another URLconf
 # from django.contrib import admin
 from django.urls import path
 
-from Clinica.views import pagina_iniziale, evento, login_paziente, registrazione_paziente, area_privata, \
-    login_personale, login_amministratore, lista_eventi, iscrizione_evento, \
-    visualizza_eventi, area_riservata_paziente, area_riservata_personale, area_riservata_amministratore, \
-    logout_paziente, logout_amministratore, logout_personale, gestione_trattamenti, lista_trattamenti, \
-    aggiungi_trattamento, elimina_trattamento, cartella_clinica, annulla_iscrizione_evento
+from Clinica.views import pagina_iniziale, evento_pagina_iniziale, area_privata, registrazione_paziente, login_paziente, \
+    login_personale, logout_paziente, logout_personale, logout_amministratore, area_riservata_paziente, \
+    area_riservata_personale, area_riservata_amministratore, login_amministratore, lista_trattamenti_amministratore, \
+    elimina_trattamento_amministratore, aggiungi_trattamento_amministratore, trattamenti_pagina_iniziale, \
+    lista_eventi_amministratore, elimina_evento_amministratore, aggiungi_evento_amministratore, \
+    visualizza_eventi_personale, iscrizione_evento_personale, annulla_iscrizione_evento_personale, \
+    lista_cartelle_personale, elimina_cartella_clinica, crea_cartella_clinica, visualizza_cartella_paziente, \
+    visualizza_eventi_paziente, iscrizione_evento_paziente, annulla_iscrizione_evento_paziente, \
+    visualizza_prenotazioni_paziente, annulla_prenotazione, crea_prenotazione, crea_recensione, visualizza_recensioni, \
+    recensioni_utenti, conferma_visita, visualizza_prenotazioni_personale
 
 urlpatterns = [
    # path('admin/', admin.site.urls),
     path('', pagina_iniziale, name='pagina_iniziale'),
+    path('eventi/', evento_pagina_iniziale, name='evento_pagina_iniziale'),
+    path('trattamenti/', trattamenti_pagina_iniziale, name='trattamenti_pagina_iniziale'),
+    path('recensioni/', recensioni_utenti, name='recensioni_utenti'),
     path('area_privata/', area_privata, name='area_privata'),
-    path('eventi/', evento, name='eventi'),
     path('registrazione_paziente/', registrazione_paziente, name='registrazione_paziente'),
     path('login_paziente/', login_paziente, name='login_paziente'),
     path('login_personale/', login_personale, name='login_personale'),
     path('login_amministratore/', login_amministratore, name='login_amministratore'),
-    #path('area_riservata/', area_riservata, name='area_riservata'),
-
+    path('logout_paziente/', logout_paziente, name='logout_paziente'),
+    path('logout_personale/', logout_personale, name='logout_personale'),
+    path('logout_amministratore/', logout_amministratore, name='logout_amministratore'),
     path('area_riservata_paziente/', area_riservata_paziente, name='area_riservata_paziente'),
     path('area_riservata_personale/', area_riservata_personale, name='area_riservata_personale'),
     path('area_riservata_amministratore/', area_riservata_amministratore, name='area_riservata_amministratore'),
-    #path('logout/', logout, name='logout'),
-    path('logout_paziente/', logout_paziente, name='logout_paziente'),
-    path('logout_amministratore/', logout_amministratore, name='logout_amministratore'),
-    path('logout_personale/', logout_personale, name='logout_personale'),
-    path('eventi/', lista_eventi, name='lista_eventi'),
-    path('visualizza_eventi/', visualizza_eventi, name='visualizza_eventi'),
-
-    path('eventi/<int:evento_id>/iscriviti/', iscrizione_evento, name='iscrizione_evento'),
-    path('eventi/<int:evento_id>/annulla/', annulla_iscrizione_evento, name='annulla_iscrizione_evento'),
-
-    #path('scegli_login/', scegli_login, name='scegli_login'),
-    path('gestione-trattamenti/',gestione_trattamenti, name='gestione_trattamenti'),
-    path('lista_trattamenti/', lista_trattamenti, name='lista_trattamenti'),
-    path('aggiungi/', aggiungi_trattamento, name='aggiungi_trattamento'),
-    path('elimina/', elimina_trattamento, name='elimina_trattamento'),
-    path('cartella_clinica/', cartella_clinica, name='cartella_clinica'),
-
+    path('lista_trattamenti_amministratore/', lista_trattamenti_amministratore, name='lista_trattamenti_amministratore'),
+    path('elimina_trattamento_amministratore/<int:trattamento_id>/', elimina_trattamento_amministratore, name='elimina_trattamento_amministratore'),
+    path('aggiungi_trattamento_amministratore/', aggiungi_trattamento_amministratore, name='aggiungi_trattamento_amministratore'),
+    path('lista_eventi_amministratore/', lista_eventi_amministratore, name='lista_eventi_amministratore'),
+    path('elimina_evento_amministratore/<int:evento_id>/', elimina_evento_amministratore, name='elimina_evento_amministratore'),
+    path('aggiungi_evento_amministratore/', aggiungi_evento_amministratore, name='aggiungi_evento_amministratore'),
+    path('visualizza_eventi_personale/', visualizza_eventi_personale, name='visualizza_eventi_personale'),
+    path('iscrizione_evento_personale/<int:evento_id>/', iscrizione_evento_personale, name='iscrizione_evento_personale'),
+    path('annulla_iscrizione_evento_personale/<int:evento_id>/', annulla_iscrizione_evento_personale, name='annulla_iscrizione_evento_personale'),
+    path('cartelle_personale/', lista_cartelle_personale, name='lista_cartelle_personale'),
+    path('elimina_cartella_personale/<int:cartella_id>/', elimina_cartella_clinica, name='elimina_cartella_clinica'),
+    path('crea_cartella_clinica/', crea_cartella_clinica, name='crea_cartella_clinica'),
+    path('cartella_paziente/', visualizza_cartella_paziente, name='visualizza_cartella_paziente'),
+    path('visualizza_eventi_paziente/', visualizza_eventi_paziente, name='visualizza_eventi_paziente'),
+    path('iscrizione_evento_paziente/<int:evento_id>/', iscrizione_evento_paziente, name='iscrizione_evento_paziente'),
+    path('annulla_iscrizione_evento_paziente/<int:evento_id>/', annulla_iscrizione_evento_paziente, name='annulla_iscrizione_evento_paziente'),
+    path('prenotazioni/', visualizza_prenotazioni_paziente, name='visualizza_prenotazioni_paziente'),
+    path('annulla_prenotazione/<int:prenotazione_id>/', annulla_prenotazione, name='annulla_prenotazione'),
+    path('crea_prenotazione/', crea_prenotazione, name='crea_prenotazione'),
+    path('visualizza_recensioni/', visualizza_recensioni, name='trattamenti_recensiti'),
+    path('crea_recensione/', crea_recensione, name='crea_recensione'),
+    path('conferma_visita/<int:prenotazione_id>/', conferma_visita, name='conferma_visita'),
+    path('appuntamenti/', visualizza_prenotazioni_personale, name='visualizza_prenotazioni_personale'),
 
 
 
 ]
 
-"""
-    
 
-    path('eventi/', evento, name='eventi'),
-    path('eventi/<int:evento_id>/iscriviti/', iscrizione_evento, name='iscrizione_evento'),
-    path('eventi/<int:evento_id>/annulla_iscrizione/', annulla_iscrizione_evento, name='annulla_iscrizione_evento'),
-
-    path('cartella_clinica/', cartella_clinica, name='cartella_clinica'),
-    path('recensioni/', trattamenti_recensibili, name='trattamenti_recensibili'),
-    path('recensioni/nuova/<int:trattamento_id>/', lascia_recensione, name='lascia_recensione'),
-    path('prenota/',crea_prenotazione, name='crea_prenotazione'),
-    path('cartelle/', cartelle_personale_view, name='cartelle_personale')
-
-"""
 
 
 

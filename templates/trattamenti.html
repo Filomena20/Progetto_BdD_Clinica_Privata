@@ -1,13 +1,12 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Lista Trattamenti Amministratore{% endblock %}
+{% block title %}Lista Trattamenti {% endblock %}
 
 {% block content %}
 <br/>
 <div class="clinic-logo-text d-flex justify-content-between align-items-center">
-    <a href="{% url 'area_riservata_amministratore' %}" class="text-decoration-none text-reset">⭠ Indietro</a>
-    <a href="{% url 'logout_amministratore' %}" class="btn btn-custom mx-2">Logout</a>
+    <a href="{% url 'pagina_iniziale' %}" class="text-decoration-none text-reset">⭠ Indietro</a>
 </div>
 
 
@@ -23,7 +22,6 @@
                             <th>Tipo</th>
                             <th>Costo</th>
                             <th>Note</th>
-                            <th>Azioni</th>
                         </tr>
                     </thead>
                 </thead>
@@ -33,26 +31,20 @@
                     <td>{{ t.tipo }}</td>
                     <td>{{ t.costo }} €</td>
                     <td>{{ t.note|default:"-" }}</td>
-                    <td>
-                        <form method="post" action="{% url 'elimina_trattamento_amministratore' t.pk %}" style="display:inline;">
-                            {% csrf_token %}
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Eliminare questo evento?')">Elimina</button>
-                        </form>
-                    </td>
+
                 </tr>
                 {% empty %}
                 <tr><td colspan="5">Nessun trattamento trovato</td></tr>
                 {% endfor %}
             </table>
 
-        <div class="text-center my-3">
-          <a href="{% url 'aggiungi_trattamento_amministratore' %}" class="btn btn-custom mx-2">Aggiungi nuovo trattamento</a>
-        </div>
-
         </div>
     </div>
 </div>
-
+<h5 class="text-center my-4">Per prenotare un trattamento presso la clinica accedi alla tua Area Personale</h5>
+        <div class="text-center mb-5">
+            <a href="{% url 'login_paziente' %}" class="btn btn-custom mx-2">Accedi</a>
+        </div>
 {% endblock %}
 
 

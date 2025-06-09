@@ -1,20 +1,64 @@
-<h1>Cartelle Cliniche dei tuoi pazienti</h1>
+{% extends "base.html" %}
+{% load static %}
 
-{% if cartelle %}
-    <ul class="list-group">
-    {% for cartella in cartelle %}
-        <li class="list-group-item mb-3">
-            <strong>Paziente:</strong> {{ cartella.paziente.nome }} {{ cartella.paziente.cognome }}<br>
-            <strong>Diagnosi:</strong> {{ cartella.diagnosi|linebreaksbr }}<br>
-            <strong>Prescrizioni:</strong> {{ cartella.prescrizioni|linebreaksbr }}<br>
-            <strong>Interventi:</strong> {{ cartella.interventi|linebreaksbr }}<br>
-            <strong>Data apertura:</strong> {{ cartella.data_apertura|date:"d/m/Y" }}<br>
-            {% if cartella.data_chiusura %}
-                <strong>Data chiusura:</strong> {{ cartella.data_chiusura|date:"d/m/Y" }}<br>
-            {% endif %}
-        </li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>Nessuna cartella disponibile.</p>
-{% endif %}
+{% block title %}Cartelle Cliniche Personale{% endblock %}
+
+{% block content %}
+<br/>
+<div class="clinic-logo-text d-flex justify-content-between align-items-center">
+    <a href="{% url 'area_riservata_personale' %}" class="text-decoration-none text-reset">⭠ Indietro</a>
+    <a href="{% url 'logout_personale' %}" class="btn btn-custom mx-2">Logout</a>
+</div>
+
+<div class="container my-5">
+    <h2 class="text-center mb-4">Cartelle Cliniche dei Pazienti</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-10">
+            <table class="table text-center table-striped table-bordered">
+                <thead class="table-light">
+                    <tr>
+                        <th>Paziente</th>
+                        <th>Data Apertura</th>
+                        <th>Diagnosi</th>
+                        <th>Prescrizioni</th>
+                        <th>Trattamento</th>
+                        <th>Data Chiusura</th>
+                        <th>Azioni</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cartella in cartelle %}
+                    <tr>
+                        <td>{{ cartella.paziente.nome }} {{ cartella.paziente.cognome }}</td>
+                        <td>{{ cartella.data_apertura }}</td>
+                        <td>{{ cartella.diagnosi }}</td>
+                        <td>{{ cartella.prescrizioni|default:"-" }}</td>
+                        <td>
+                            {% if cartella.trattamento %}
+                                {{ cartella.trattamento.nome }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td>{{ cartella.data_chiusura|default:"-" }}</td>
+                        <td>
+                            <form method="post" action="{% url 'elimina_cartella_clinica' cartella.id %}" style="display:inline;">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Eliminare questa cartella?')">Elimina</button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr><td colspan="7">Nessuna cartella trovata.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="text-center my-3">
+                <a href="{% url 'crea_cartella_clinica' %}" class="btn btn-custom mx-2">Aggiungi nuova Cartella</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

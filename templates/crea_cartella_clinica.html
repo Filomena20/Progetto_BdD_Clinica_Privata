@@ -1,0 +1,101 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Crea Nuova Cartella Clinica{% endblock %}
+
+{% block content %}
+<br/>
+<div class="clinic-logo-text d-flex justify-content-between align-items-center">
+    <a href="{% url 'lista_cartelle_personale' %}" class="text-decoration-none text-reset">⭠ Indietro</a>
+    <a href="{% url 'logout_personale' %}" class="btn btn-custom mx-2">Logout</a>
+</div>
+
+<div class="container my-5">
+    <h2 class="text-center mb-4">Crea Nuova Cartella Clinica</h2>
+
+    {% if messages %}
+    <div>
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <form method="post" action="{% url 'crea_cartella_clinica' %}">
+        {% csrf_token %}
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="nome" class="form-label">Nome Paziente</label>
+                <input type="text" class="form-control" id="nome" name="nome" required>
+            </div>
+            <div class="col-md-6">
+                <label for="cognome" class="form-label">Cognome Paziente</label>
+                <input type="text" class="form-control" id="cognome" name="cognome" required>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="email" class="form-label">Email Paziente</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="data_nascita" class="form-label">Data di Nascita</label>
+                <input type="date" class="form-control" id="data_nascita" name="data_nascita" required>
+            </div>
+            <div class="col-md-6">
+                <label for="codice_fiscale" class="form-label">Codice Fiscale</label>
+                <input type="text" class="form-control" id="codice_fiscale" name="codice_fiscale" required>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="cellulare" class="form-label">Cellulare</label>
+            <input type="text" class="form-control" id="cellulare" name="cellulare" required>
+        </div>
+
+        <div class="mb-3">
+            <label for="indirizzo" class="form-label">Indirizzo</label>
+            <input type="text" class="form-control" id="indirizzo" name="indirizzo" required>
+        </div>
+
+        <hr>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="data_apertura" class="form-label">Data Apertura Cartella</label>
+                <input type="date" class="form-control" id="data_apertura" name="data_apertura" required>
+            </div>
+            <div class="col-md-6">
+                <label for="data_chiusura" class="form-label">Data Chiusura Cartella (opzionale)</label>
+                <input type="date" class="form-control" id="data_chiusura" name="data_chiusura">
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <label for="diagnosi" class="form-label">Diagnosi</label>
+            <textarea class="form-control" id="diagnosi" name="diagnosi" rows="3" required></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="prescrizioni" class="form-label">Prescrizioni (opzionale)</label>
+            <textarea class="form-control" id="prescrizioni" name="prescrizioni" rows="3"></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label for="trattamento_id" class="form-label">Trattamento (opzionale)</label>
+            <select class="form-select" id="trattamento_id" name="trattamento_id">
+                <option value="" selected>Seleziona un trattamento</option>
+                {% for trattamento in trattamenti %}
+                    <option value="{{ trattamento.id }}">{{ trattamento.nome }}</option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="text-center">
+            <button type="submit" class="btn btn-custom">Crea Cartella</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

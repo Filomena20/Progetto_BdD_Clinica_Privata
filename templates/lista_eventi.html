@@ -1,0 +1,61 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Lista Eventi Amministratore{% endblock %}
+
+{% block content %}
+<br/>
+<div class="clinic-logo-text d-flex justify-content-between align-items-center">
+    <a href="{% url 'area_riservata_amministratore' %}" class="text-decoration-none text-reset">⭠ Indietro</a>
+    <a href="{% url 'logout_amministratore' %}" class="btn btn-custom mx-2">Logout</a>
+</div>
+
+
+<div class="container my-5">
+    <h2 class="text-center mb-4">Lista Eventi</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <table class="table text-center">
+                <thead>
+                        <thead>
+                            <tr>
+                              <th>Data</th>
+                              <th>Titolo</th>
+                              <th>Descrizione</th>
+                              <th>Presenze Effettive</th>
+                              <th>Azioni</th>
+                            </tr>
+                        </thead>
+                </thead>
+
+
+                {% for evento in eventi %}
+                    <tr>
+                      <td>{{ evento.data }}</td>
+                      <td>{{ evento.titolo }}</td>
+                      <td>{{ evento.descrizione }}</td>
+                      <td>{{ evento.presenze_effettive }}</td>
+                      <td>
+                        <form method="post" action="{% url 'elimina_evento_amministratore' evento.id %}" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Eliminare questo trattamento?')">Elimina</button>
+                        </form>
+                      </td>
+                    </tr>
+                {% empty %}
+                <tr><td colspan="5">Nessun evento trovato</td></tr>
+                {% endfor %}
+            </table>
+
+        <div class="text-center my-3">
+          <a href="{% url 'aggiungi_evento_amministratore' %}" class="btn btn-custom mx-2">Aggiungi nuovo Evento</a>
+        </div>
+
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+
+

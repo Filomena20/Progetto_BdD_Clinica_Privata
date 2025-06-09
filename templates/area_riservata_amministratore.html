@@ -12,7 +12,7 @@
 
 <div class='row justify-content-center'>
     <div class="col-md-6 text-center">
-        <p class="fs-4"> BENVENUTO/A {{ amministratore.nome }} </p>
+        <p class="fs-4"> BENVENUTO/A {{ amministratore.nome }} {{ amministratore.cognome }} </p>
     </div>
 </div>
 
@@ -21,9 +21,18 @@
     <div class="col-12 col-md-4">
         <div class="card shadow-sm">
             <div class="card-body">
-                <h3 class="card-title">Lista Trattamenti</h3>
+                <h3 class="card-title">Lista Trattamenti Clinica</h3>
                 <p class="card-text">Clicca per consultare la tua lista dei trattamenti</p>
-                <a href="{% url 'lista_trattamenti' %}" class="btn btn-custom mx-2">Apri</a>
+                <a href="{% url 'lista_trattamenti_amministratore' %}" class="btn btn-custom mx-2">Apri</a>
+            </div>
+        </div>
+        <br/>
+        <br/>
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h3 class="card-title">Lista Eventi Clinica</h3>
+                <p class="card-text">Clicca per consultare la tua lista degli eventi</p>
+                <a href="{% url 'lista_eventi_amministratore' %}" class="btn btn-custom mx-2">Apri</a>
             </div>
         </div>
     </div>

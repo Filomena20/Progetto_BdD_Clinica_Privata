@@ -3,26 +3,57 @@
 {% block title %}Nuova Prenotazione{% endblock %}
 
 {% block content %}
-    <h1 class="mb-4">Effettua una nuova prenotazione</h1>
+<br/>
+<div class="clinic-logo-text d-flex justify-content-between align-items-center">
+    <a href="{% url 'visualizza_prenotazioni_paziente' %}" class="text-decoration-none text-reset">⭠ Indietro</a>
+    <a href="{% url 'logout_paziente' %}" class="btn btn-custom mx-2">Logout</a>
+</div>
 
-    {% if messages %}
-        <div>
-            {% for message in messages %}
-                <div class="alert alert-info">{{ message }}</div>
-            {% endfor %}
-        </div>
-    {% endif %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h1 class="mb-4">Effettua una nuova prenotazione</h1>
 
-    <form method="post" class="mb-3">
-        {% csrf_token %}
-        {{ form.as_p }}
+                {% if messages %}
+                    <div>
+                        {% for message in messages %}
+                            <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
 
-        {% if form.non_field_errors %}
-            <div class="alert alert-danger">
-                {{ form.non_field_errors }}
+                <form method="post" action="{% url 'crea_prenotazione' %}">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="trattamento" class="form-label">Trattamento</label>
+                        <select name="trattamento_id" id="trattamento" class="form-select" required>
+                            <option value="" disabled selected>Seleziona un trattamento</option>
+                            {% for trattamento in trattamenti %}
+                                <option value="{{ trattamento.id }}">{{ trattamento.nome }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="data" class="form-label">Data</label>
+                        <input type="date" id="data" name="data" class="form-control" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="ora" class="form-label">Ora</label>
+                        <select name="ora" id="ora" class="form-select" required>
+                            <option value="" disabled selected>Seleziona un orario</option>
+                            {% for orario in orari_disponibili %}
+                                <option value="{{ orario|time:'H:i' }}">{{ orario|time:"H:i" }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">Prenota</button>
+                </form>
             </div>
-        {% endif %}
-
-        <button type="submit" class="btn btn-primary">Prenota</button>
-    </form>
+        </div>
+    </div>
+</div>
 {% endblock %}

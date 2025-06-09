@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Aggiungi Evento{% endblock %}
+
+{% block content %}
+<br/>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <a href="{% url 'lista_eventi_amministratore' %}" class="text-decoration-none text-reset">⭠ Indietro</a>
+    <a href="{% url 'logout_amministratore' %}" class="btn btn-custom mx-2">Logout</a>
+</div>
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Aggiungi Evento</h2>
+
+                {% if error %}
+                <div class="alert alert-danger">{{ error }}</div>
+                {% endif %}
+
+                <form method="post" action="{% url 'aggiungi_evento_amministratore' %}">
+
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="data" class="form-label">Data</label>
+                        <input type="date" class="form-control" id="data" name="data" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="titolo" class="form-label">Titolo</label>
+                        <input type="text" class="form-control" id="titolo" name="titolo" required>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="descrizione" class="form-label">Descrizione</label>
+                        <textarea class="form-control" id="descrizione" name="descrizione" rows="3" required></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="presenze_effettive" class="form-label">Presenze Effettive</label>
+                        <input type="number" class="form-control" id="presenze_effettive" name="presenze_effettive" min="0" value="0">
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" name="aggiungi" class="btn btn-custom">Aggiungi Evento</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

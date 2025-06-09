@@ -76,7 +76,7 @@ class Trattamento(models.Model):
 
     nome = models.CharField(max_length=100, default="")
     tipo = EnumField(choices=Tipo.choices, default=Tipo.RICOVERO)
-    paziente = models.ForeignKey(Paziente, on_delete=models.CASCADE)
+    paziente = models.ForeignKey(Paziente, on_delete=models.CASCADE, null=True, blank=True)
     costo = models.DecimalField(max_digits=8, decimal_places=2, null=False, blank=False)
     note = models.TextField(blank=True, null=True)
     gestore = models.ForeignKey(Amministratore_Clinica, on_delete=models.SET_NULL, null=True, blank=True)
@@ -124,7 +124,7 @@ class Iscrizione(models.Model):
     class Stato(models.TextChoices):
         ISCRITTO = 'iscritto', 'Iscritto'
         ANNULLATO = 'annullato', 'Annullato'
-        IN_ATTESA = 'in_attesa', 'In attesa'
+        #IN_ATTESA = 'in_attesa', 'In attesa'
 
     stato = models.CharField(max_length=50, choices=Stato.choices, default=Stato.ISCRITTO)
 
