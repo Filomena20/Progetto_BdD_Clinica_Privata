@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+
+{% block title %}Home - Clinica ReViva{% endblock %}
+
+{% block content %}
+<div class="my-5">
+    <div class="intro-box text-center">
+        <p>
+            Fondata nel 1995, ReViva nasce con la missione di offrire un ambiente accogliente e professionale per la salute e il benessere delle persone.
+            Con oltre 25 anni di esperienza, abbiamo costruito una realtà solida e innovativa, unendo tecnologie all'avanguardia e un team medico altamente qualificato.
+            Oggi ReViva rappresenta un punto di riferimento per chi cerca cure personalizzate e servizi sanitari d’eccellenza.
+        </p>
+    </div>
+</div>
+
+<div class="text-center mb-5">
+    <a href="{% url 'area_privata' %}" class="btn btn-custom mx-2">Area Privata</a>
+</div>
+
+<br/>
+<hr>
+
+
+<!-- Sezione Perché Scegliere Noi -->
+<div class="container my-5">
+    <h2 class="text-center mb-4">Perché Scegliere Noi</h2>
+    <p class="text-center mb-5">La Clinica Salute offre un'assistenza sanitaria completa e personalizzata per tutta la famiglia.</p>
+    <div class="row text-center">
+        <div class="col-md-4 mb-4">
+            <div class="icon mb-3">
+                <span class="badge" style="background-color: #5ce6e6; color: #000; border-radius: 50%; padding: 15px;">
+                    <i class="bi bi-check2-circle"></i>
+                </span>
+
+            </div>
+
+            <h5>Medici Specialisti</h5>
+            <p>Il nostro team è composto da professionisti altamente qualificati con anni di esperienza.</p>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="icon mb-3">
+                <span class="badge" style="background-color: #5ce6e6; color: #000; border-radius: 50%; padding: 15px;">
+                    <i class="bi bi-heart-fill"></i>
+                </span>
+            </div>
+
+            <h5>Assistenza Personalizzata</h5>
+            <p>Ogni paziente riceve un piano di cura su misura per le proprie esigenze specifiche.</p>
+        </div>
+        <div class="col-md-4 mb-4">
+            <div class="icon mb-3">
+                <span class="badge" style="background-color: #5ce6e6; color: #000; border-radius: 50%; padding: 15px;">
+                    <i class="bi bi-calendar-check"></i>
+                </span>
+            </div>
+            <h5>Appuntamenti Rapidi</h5>
+            <p>Prenota facilmente online o telefonicamente con tempi di attesa minimi.</p>
+        </div>
+    </div>
+</div>
+
+<br/>
+<hr>
+<!-- Orari della Clinica -->
+<div class="container my-5">
+    <h2 class="text-center mb-4">Orari della Clinica</h2>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <table class="table text-center">
+                <thead>
+                    <tr>
+                        <th>Giorno</th>
+                        <th>Orario</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Lunedì - Sabato</td>
+                        <td>08:00 – 20:00</td>
+                    </tr>
+                    <tr>
+                        <td>Domenica</td>
+                        <td>Chiuso</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+<br/>
+<hr>
+
+<!-- Sezione Contatti -->
+<div class="container my-5">
+    <h2 class="text-center mb-4">Contatti</h2>
+    <div class="row justify-content-center text-center">
+        <div class="col-md-4 mb-3">
+            <div class="contact-box p-3 border rounded">
+                <h5>Email</h5>
+                <p><a href="mailto:info@clinicareviva.it">info@clinicareviva.it</a></p>
+                <!--Quando un utente clicca su "info@clinicareviva.it", si apre automaticamente
+                il programma di posta predefinito (es. Outlook, Mail, Gmail se configurato) per
+                inviare una mail a quell’indirizzo.!-->
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="contact-box p-3 border rounded">
+                <h5>Telefono</h5>
+                <p><a href="tel:+390813456789">+39 0813 456789</a></p>
+                <!--Cliccando si apre app telefono!-->
+            </div>
+        </div>
+        <div class="col-md-4 mb-3">
+            <div class="contact-box p-3 border rounded">
+                <h5>Indirizzo</h5>
+                <p>Via della Salute, 10<br>80040 Napoli (Na)</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% endblock %}

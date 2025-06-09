@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Registrazione Paziente{% endblock %}
+
+{% block content %}
+<br />
+<div class="clinic-logo-text">
+    <a href="{% url 'area_privata' %}" class="text-decoration-none text-reset">⭠ Indietro</a>
+</div>
+<br />
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Registrazione Paziente</h2>
+
+                 <form method="POST">
+                    {% csrf_token %}
+                    {% if error %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                    {% endif %}
+                    {% if success_message %}
+                    <div class="alert alert-success">{{ success_message }}</div>
+                    {% endif %}
+
+                     <div class="mb-3">
+                        <label for="nome" class="form-label">Nome:</label>
+                        <input type="text" class="form-control" id="nome" name="nome" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="cognome" class="form-label">Cognome:</label>
+                        <input type="text" class="form-control" id="cognome" name="cognome" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="codice_fiscale" class="form-label">Codice Fiscale:</label>
+                        <input type="text" class="form-control" id="codice_fiscale" name="codice_fiscale" maxlength="16" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="email" class="form-control" id="email" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password:</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="cellulare" class="form-label">Numero di cellulare:</label>
+                        <input type="text" class="form-control" id="cellulare" name="cellulare" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="indirizzo" class="form-label">Indirizzo:</label>
+                        <input type="text" class="form-control" id="indirizzo" name="indirizzo" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="data_nascita" class="form-label">Data di nascita:</label>
+                        <input type="date" class="form-control" id="data_nascita" name="data_nascita" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="patologie" class="form-label">Patologie (opzionale):</label>
+                        <textarea class="form-control" id="patologie" name="patologie" rows="2"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="allergie" class="form-label">Allergie (opzionale):</label>
+                        <textarea class="form-control" id="allergie" name="allergie" rows="2"></textarea>
+                    </div>
+
+                     <div class="d-grid mb-3">
+                        <button type="submit" class="btn btn-success">Registrati</button>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

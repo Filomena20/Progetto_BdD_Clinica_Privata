@@ -1,0 +1,7 @@
+<h2>Sei sicuro di voler eliminare il trattamento "{{ trattamento.nome }}"?</h2>
+
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Conferma eliminazione</button>
+    <a href="{% url 'lista_trattamenti' %}">Annulla</a>
+</form>

@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+
+{% block title %}Lascia Recensione{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+  <div class="col-md-6">
+    <a href="{% url 'trattamenti_recensibili' %}" class="link-no-style mb-3 d-inline-block">&larr; Indietro</a>
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h2 class="card-title mb-4 text-center">Lascia una recensione</h2>
+        <form method="post" novalidate>
+          {% csrf_token %}
+          
+          {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+              {{ form.non_field_errors }}
+            </div>
+          {% endif %}
+          
+          <div class="mb-3">
+            <label for="{{ form.trattamento.id_for_label }}" class="form-label">{{ form.trattamento.label }}</label>
+            {{ form.trattamento }}
+            {% if form.trattamento.errors %}
+              <div class="text-danger small mt-1">
+                {{ form.trattamento.errors|striptags }}
+              </div>
+            {% endif %}
+          </div>
+
+          <fieldset class="mb-3">
+            <legend class="form-label">{{ form.valutazione.label }}</legend>
+            {% for radio in form.valutazione %}
+              <div class="form-check form-check-inline">
+                {{ radio.tag }}
+                <label class="form-check-label" for="{{ radio.id_for_label }}">
+                  {{ radio.choice_label }}
+                </label>
+              </div>
+            {% endfor %}
+            {% if form.valutazione.errors %}
+              <div class="text-danger small mt-1">
+                {{ form.valutazione.errors|striptags }}
+              </div>
+            {% endif %}
+          </fieldset>
+
+          <div class="mb-3">
+            <label for="{{ form.testo.id_for_label }}" class="form-label">{{ form.testo.label }}</label>
+            {{ form.testo }}
+            {% if form.testo.errors %}
+              <div class="text-danger small mt-1">
+                {{ form.testo.errors|striptags }}
+              </div>
+            {% endif %}
+          </div>
+
+          <div class="d-grid">
+            <button type="submit" class="btn btn-primary">Invia Recensione</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

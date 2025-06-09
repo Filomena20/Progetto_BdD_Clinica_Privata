@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Lista Eventi{% endblock %}
+
+{% block content %}
+
+<br/>
+
+<div class="clinic-logo-text d-flex justify-content-between align-items-center">
+    <a href="{% url 'pagina_iniziale' %}" class="text-decoration-none text-reset">⭠ Indietro</a>
+</div>
+
+<h1 class="text-center my-4">Eventi</h1>
+
+{% if eventi %}
+<table class="table table-striped table-bordered">
+  <thead class="table-light">
+    <tr>
+      <th>Data</th>
+      <th>Titolo</th>
+      <th>Descrizione</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for evento in eventi %}
+    <tr>
+      <td>{{ evento.data }}</td>
+      <td>{{ evento.titolo }}</td>
+      <td>{{ evento.descrizione }}</td>
+
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+<h4 class="text-center my-4">Per iscriverti ad un evento entra nella tua area personale ed effettua l'iscrizione</h4>
+<div class="text-center mb-5">
+    <a href="{% url 'area_privata' %}" class="btn btn-custom mx-2">Area Privata</a>
+</div>
+{% else %}
+<p class="text-center">Nessun evento disponibile.</p>
+{% endif %}
+{% endblock %}

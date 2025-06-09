@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Cartella Clinica - Area Riservata Paziente{% endblock %}
+
+{% block content %}
+<br/>
+  {% if paziente and cartella %}
+   <div class="clinic-logo-text d-flex justify-content-between align-items-center">
+        <a href="{% url 'area_riservata_paziente' %}" class="text-decoration-none text-reset">⭠ Indietro</a>
+        <a href="{% url 'logout_paziente' %}" class="btn btn-custom mx-2">Logout</a>
+    </div>
+      <div class="card-header">
+        <h2>Cartella Clinica di {{ paziente.nome }} {{ paziente.cognome }}</h2>
+      </div>
+      <div class="card-body">
+        <h4>Dati Paziente</h4>
+        <p><strong>Codice Fiscale:</strong> {{ paziente.codice_fiscale }}</p>
+        <p><strong>Data di Nascita:</strong> {{ paziente.data_nascita}}</p>
+        <p><strong>Patologie:</strong> {{ paziente.patologie}}</p>
+        <p><strong>Allergie:</strong> {{ paziente.allergie }}</p>
+        <p><strong>Cellulare:</strong> {{ paziente.cellulare }}</p>
+        <p><strong>Indirizzo:</strong> {{ paziente.indirizzo }}</p>
+
+        <hr>
+
+        <h4>Dettagli Cartella Clinica</h4>
+        <p><strong>Data apertura:</strong> {{ cartella.data_apertura|date:"d/m/Y" }}</p>
+        <p><strong>Diagnosi:</strong> {{ cartella.diagnosi }}</p>
+        <p><strong>Prescrizioni:</strong> {{ cartella.prescrizioni }}</p>
+        <p><strong>Trattamenti:</strong> {{ cartella.trattamento }}</p>
+        <p><strong>Data chiusura:</strong> {{ cartella.data_chiusura|date:"d/m/Y"|default:"-" }}</p>
+      </div>
+
+  {% else %}
+    <div class="alert alert-warning" role="alert">
+      Cartella clinica non trovata.
+    </div>
+  {% endif %}
+{% endblock %}

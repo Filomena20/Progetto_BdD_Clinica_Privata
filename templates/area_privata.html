@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% block title %}Area Personale - ReViva{% endblock %}
+
+{% block content %}
+
+<br/>
+<div class="clinic-logo-text d-flex justify-content-between align-items-center">
+    <a href="{% url 'pagina_iniziale' %}" class="text-decoration-none text-reset">⭠ Indietro</a>
+</div>
+
+
+ <h1 class="text-center">Accedi alla tua Area Privata</h1>
+
+<br/>
+<br/>
+
+<div class="row justify-content-center g-4">
+            <div class="col-12 col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h3 class="card-title">Paziente</h3>
+                        <p class="card-text">Accedi come paziente per consultare i tuoi dati clinici.</p>
+                        <a href="{% url 'login_paziente' %}" class="btn btn-custom mx-2">Accedi</a>
+
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h3 class="card-title">Personale Medico</h3>
+                        <p class="card-text">Accedi come medico o operatore sanitario per gestire i pazienti.</p>
+                        <a href="{% url 'login_personale' %}" class="btn btn-custom mx-2">Accedi</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-md-4">
+                <div class="card shadow-sm">
+                    <div class="card-body">
+                        <h3 class="card-title">Amministratore</h3>
+                        <p class="card-text">Accesso riservato per gestione sistema e utenti.</p>
+                        <a href="{% url 'login_amministratore' %}" class="btn btn-custom mx-2">Accedi</a>
+                    </div>
+                </div>
+            </div>
+
+</div>
+{% endblock %}

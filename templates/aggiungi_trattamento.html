@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Area Riservata Amministratore{% endblock %}
+
+{% block content %}
+<br/>
+<div class="clinic-logo-text">
+    <a href="{% url 'lista_trattamenti' %}" class="text-decoration-none text-reset">⭠ Indietro</a>
+    <a href="{% url 'logout_amministratore' %}" class="btn btn-custom mx-2 float-end">Logout</a>
+</div>
+<br/>
+
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Aggiungi Trattamento</h2>
+
+                {% if error %}
+                <div class="alert alert-danger">{{ error }}</div>
+                {% endif %}
+
+                <form method="post">
+                    {% csrf_token %}
+
+                    <div class="mb-3">
+                        <label for="nome" class="form-label">Nome:</label>
+                        <input id="nome" type="text" name="nome" class="form-control" required value="{{ nome|default:'' }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="tipo" class="form-label">Tipo:</label>
+                        <select id="tipo" name="tipo" class="form-select" onchange="toggleCampi(this.value)" required>
+                            <option value="Ricovero" {% if tipo == "Ricovero" %}selected{% endif %}>Ricovero</option>
+                            <option value="Riabilitazione" {% if tipo == "Riabilitazione" %}selected{% endif %}>Riabilitazione</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="costo" class="form-label">Costo (€):</label>
+                        <input id="costo" type="number" step="0.01" name="costo" class="form-control" required value="{{ costo|default:'' }}">
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="note" class="form-label">Note:</label>
+                        <textarea id="note" name="note" class="form-control">{{ note|default:'' }}</textarea>
+                    </div>
+
+                    <div id="campi_ricovero" style="display:none;">
+                        <h5>Campi Ricovero</h5>
+                        <div class="mb-3">
+                            <label for="data_inizio" class="form-label">Data Inizio:</label>
+                            <input id="data_inizio" type="date" name="data_inizio" class="form-control" value="{{ data_inizio|default:'' }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="data_fine" class="form-label">Data Fine:</label>
+                            <input id="data_fine" type="date" name="data_fine" class="form-control" value="{{ data_fine|default:'' }}">
+                        </div>
+                        <div class="mb-3">
+                            <label for="stanza" class="form-label">Stanza:</label>
+                            <input id="stanza" type="text" name="stanza" class="form-control" value="{{ stanza|default:'' }}">
+                        </div>
+                    </div>
+
+                    <div id="campi_riabilitazione" style="display:none;">
+                        <h5>Campi Riabilitazione</h5>
+                        <div class="mb-3">
+                            <label for="durata" class="form-label">Durata (giorni):</label>
+                            <input id="durata" type="number" name="durata" class="form-control" value="{{ durata|default:'' }}">
+                        </div>
+                    </div>
+
+                    <div class="d-grid">
+                        <button type="submit" name="aggiungi" class="btn btn-custom">Aggiungi</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function toggleCampi(tipo) {
+        document.getElementById('campi_ricovero').style.display = (tipo === 'Ricovero') ? 'block' : 'none';
+        document.getElementById('campi_riabilitazione').style.display = (tipo === 'Riabilitazione') ? 'block' : 'none';
+    }
+
+    const tipoSelect = document.querySelector('select[name="tipo"]');
+    if (tipoSelect) toggleCampi(tipoSelect.value);
+</script>
+
+{% endblock %}

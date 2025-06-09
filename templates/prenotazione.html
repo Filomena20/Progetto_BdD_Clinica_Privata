@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Nuova Prenotazione{% endblock %}
+
+{% block content %}
+    <h1 class="mb-4">Effettua una nuova prenotazione</h1>
+
+    {% if messages %}
+        <div>
+            {% for message in messages %}
+                <div class="alert alert-info">{{ message }}</div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <form method="post" class="mb-3">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary">Prenota</button>
+    </form>
+{% endblock %}

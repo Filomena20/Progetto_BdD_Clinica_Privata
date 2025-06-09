@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Iscrizione non trovata{% endblock %}
+
+{% block content %}
+<div class="alert alert-warning text-center mt-5">
+    <h2>Iscrizione non trovata</h2>
+    <p>Non sei iscritto all’evento: <strong>{{ evento.titolo }}</strong>.</p>
+    <a href="{% url 'area_riservata_paziente' %}" class="btn btn-primary">Torna al tuo profilo</a>
+</div>
+{% endblock %}

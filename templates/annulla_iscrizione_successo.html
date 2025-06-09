@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Iscrizione annullata{% endblock %}
+
+{% block content %}
+<div class="alert alert-success text-center mt-5">
+    <h2>Iscrizione annullata con successo!</h2>
+    <p>Hai annullato l’iscrizione all’evento: <strong>{{ evento.titolo }}</strong> del {{ evento.data|date:"d/m/Y" }}.</p>
+    <a href="{% url 'area_riservata_paziente' %}" class="btn btn-primary">Torna al tuo profilo</a>
+</div>
+{% endblock %}

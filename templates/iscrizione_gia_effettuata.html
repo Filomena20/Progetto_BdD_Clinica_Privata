@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+
+{% block title %}Iscrizione già effettuata{% endblock %}
+
+{% block content %}
+<div class="alert alert-warning text-center mt-5">
+    <h2>Iscrizione già effettuata</h2>
+    <p>Sei già iscritto all’evento: <strong>{{ evento.titolo }}</strong> del {{ evento.data|date:"d/m/Y" }}.</p>
+    <a href="{% url 'eventi' %}" class="btn btn-primary">Torna agli eventi</a>
+</div>
+{% endblock %}

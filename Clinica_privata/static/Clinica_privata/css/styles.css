@@ -1,0 +1,39 @@
+.logo-img {
+    height: 80px;
+}
+
+/*Intro clinica*/
+.intro-box {
+    background-color: #b2f1f1;
+    border-radius: 10px;
+    padding: 20px;
+    font-family: 'Georgia', serif;
+    font-size: 18px;
+}
+
+.btn-custom {
+    background-color: #5ce6e6;
+    color: black;
+    border-radius: 30px;
+    padding: 10px 30px;
+    transition: background-color 0.3s;
+    font-size: 18px;
+    text-decoration: none;
+}
+
+.btn-custom:hover {
+    background-color: #39d3d3;
+    color: black;
+}
+
+/*tabella orari clinica*/
+table {
+    font-family: 'Georgia', serif;
+    background-color: #ffffff; /* sfondo delle righe normali */
+}
+
+thead th {
+    background-color: #5ce6e6 !important;
+    color: #000;
+    font-family: 'Georgia', serif;
+}

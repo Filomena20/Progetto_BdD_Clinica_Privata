@@ -1,0 +1,20 @@
+<h1>Cartelle Cliniche dei tuoi pazienti</h1>
+
+{% if cartelle %}
+    <ul class="list-group">
+    {% for cartella in cartelle %}
+        <li class="list-group-item mb-3">
+            <strong>Paziente:</strong> {{ cartella.paziente.nome }} {{ cartella.paziente.cognome }}<br>
+            <strong>Diagnosi:</strong> {{ cartella.diagnosi|linebreaksbr }}<br>
+            <strong>Prescrizioni:</strong> {{ cartella.prescrizioni|linebreaksbr }}<br>
+            <strong>Interventi:</strong> {{ cartella.interventi|linebreaksbr }}<br>
+            <strong>Data apertura:</strong> {{ cartella.data_apertura|date:"d/m/Y" }}<br>
+            {% if cartella.data_chiusura %}
+                <strong>Data chiusura:</strong> {{ cartella.data_chiusura|date:"d/m/Y" }}<br>
+            {% endif %}
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>Nessuna cartella disponibile.</p>
+{% endif %}
