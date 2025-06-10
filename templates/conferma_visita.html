@@ -9,7 +9,14 @@
     <a href="{% url 'visualizza_prenotazioni_personale' %}" class="text-decoration-none text-reset">⭠ Indietro</a>
     <a href="{% url 'logout_personale' %}" class="btn btn-custom mx-2">Logout</a>
 </div>
-
+<br/>
+{% if messages %}
+    <div class="alert alert-success">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+{% endif %}
 
 <div class="row justify-content-center">
     <div class="col-md-8 col-lg-6">

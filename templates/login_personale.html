@@ -17,8 +17,8 @@
                 <form method="POST">
                     {% csrf_token %}
 
-                    {% if error_message %}
-                      <div class="alert alert-danger">{{ error_message }}</div>
+                    {% if error %}
+                      <div class="alert alert-danger">{{ error }}</div>
                     {% endif %}
                     <div class="mb-3">
                         <label for="email" class="form-label">Email:</label>

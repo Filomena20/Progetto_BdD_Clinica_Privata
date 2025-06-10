@@ -8,7 +8,14 @@
     <a href="{% url 'area_riservata_personale' %}" class="text-decoration-none text-reset">⭠ Indietro</a>
     <a href="{% url 'logout_personale' %}" class="btn btn-custom mx-2">Logout</a>
 </div>
-
+<br/>
+{% if messages %}
+    <div class="alert alert-success">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+{% endif %}
 <h2 class="card-title text-center mb-4">Appuntamenti</h2>
   {% if prenotazioni %}
     <table class="table table-bordered table-hover">

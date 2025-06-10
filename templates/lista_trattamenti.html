@@ -9,6 +9,14 @@
     <a href="{% url 'area_riservata_amministratore' %}" class="text-decoration-none text-reset">⭠ Indietro</a>
     <a href="{% url 'logout_amministratore' %}" class="btn btn-custom mx-2">Logout</a>
 </div>
+<br/>
+{% if messages %}
+    <div class="alert alert-success">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+{% endif %}
 
 
 <div class="container my-5">
@@ -36,7 +44,7 @@
                     <td>
                         <form method="post" action="{% url 'elimina_trattamento_amministratore' t.pk %}" style="display:inline;">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Eliminare questo evento?')">Elimina</button>
+                           <button type="submit" class="btn btn-danger btn-sm">Elimina</button>
                         </form>
                     </td>
                 </tr>

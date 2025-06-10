@@ -10,7 +10,14 @@
     <a href="{% url 'logout_amministratore' %}" class="btn btn-custom mx-2">Logout</a>
 </div>
 
-
+<br/>
+{% if messages %}
+    <div class="alert alert-success">
+        {% for message in messages %}
+            {{ message }}
+        {% endfor %}
+    </div>
+{% endif %}
 <div class="container my-5">
     <h2 class="text-center mb-4">Lista Eventi</h2>
     <div class="row justify-content-center">
@@ -38,7 +45,7 @@
                       <td>
                         <form method="post" action="{% url 'elimina_evento_amministratore' evento.id %}" style="display:inline;">
                             {% csrf_token %}
-                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Eliminare questo trattamento?')">Elimina</button>
+                            <button type="submit" class="btn btn-danger btn-sm">Elimina</button>
                         </form>
                       </td>
                     </tr>

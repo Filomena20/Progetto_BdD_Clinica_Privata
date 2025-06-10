@@ -12,9 +12,6 @@
 
 <div class="row justify-content-center">
     <div class="col-md-8 col-lg-6">
-
-
-
         <div class="card shadow-sm">
             <div class="card-body">
                 <h2 class="card-title text-center mb-4">Aggiungi Trattamento</h2>
@@ -22,70 +19,71 @@
                 {% if error %}
                 <div class="alert alert-danger">{{ error }}</div>
                 {% endif %}
-                 <!-- Form per scegliere il tipo con GET -->
-                <form method="get" action="{% url 'aggiungi_trattamento_amministratore' %}" class="mb-4">
-                    <label for="tipo" class="form-label">Tipo:</label>
-                    <select id="tipo" name="tipo" class="form-select" onchange="this.form.submit()">
-                        <option value="Ricovero" {% if tipo == "Ricovero" %}selected{% endif %}>Ricovero</option>
-                        <option value="Riabilitazione" {% if tipo == "Riabilitazione" %}selected{% endif %}>Riabilitazione</option>
-                    </select>
+
+                <!-- Form per selezionare tipo -->
+                <form method="post" action="{% url 'aggiungi_trattamento_amministratore' %}" class="mb-4">
+                    <label for="tipo" class="form-label">Tipo di Trattamento:</label>
+                    <div class="input-group">
+                        <select name="tipo" id="tipo" class="form-select">
+                            <option value="Ricovero" {% if tipo == "Ricovero" %}selected{% endif %}>Ricovero</option>
+                            <option value="Riabilitazione" {% if tipo == "Riabilitazione" %}selected{% endif %}>Riabilitazione</option>
+                        </select>
+                        <button type="submit" class="btn btn-outline-secondary">Conferma</button>
+                    </div>
                 </form>
-                <!-- Form principale POST -->
+
+                <!-- Form principale -->
                 <form method="post" action="{% url 'aggiungi_trattamento_amministratore' %}">
                     {% csrf_token %}
 
-                    <!-- Mando tipo come hidden per conservarlo nel POST -->
+                    <!-- Mantieni il tipo come hidden -->
                     <input type="hidden" name="tipo" value="{{ tipo }}">
 
                     <div class="mb-3">
-                        <label for="nome" class="form-label">Nome:</label>
-                        <input id="nome" type="text" name="nome" class="form-control" required value="{{ nome|default:'' }}">
+                        <label for="nome" class="form-label">Nome</label>
+                        <input type="text" id="nome" name="nome" class="form-control" required value="{{ nome|default:'' }}">
                     </div>
 
                     <div class="mb-3">
-                        <label for="costo" class="form-label">Costo (€):</label>
-                        <input id="costo" type="number" step="0.01" name="costo" class="form-control" required value="{{ costo|default:'' }}">
+                        <label for="costo" class="form-label">Costo (€)</label>
+                        <input type="number" step="0.01" id="costo" name="costo" class="form-control" required value="{{ costo|default:'' }}">
                     </div>
 
                     <div class="mb-3">
-                        <label for="note" class="form-label">Note:</label>
+                        <label for="note" class="form-label">Note</label>
                         <textarea id="note" name="note" class="form-control">{{ note|default:'' }}</textarea>
                     </div>
 
-                    <!-- Campi specifici a seconda del tipo -->
                     {% if tipo == "Ricovero" %}
-                    <div id="campi_ricovero">
-                        <h5>Campi Ricovero</h5>
+                        <h4>Dettagli Ricovero</h4>
                         <div class="mb-3">
-                            <label for="data_inizio" class="form-label">Data Inizio:</label>
-                            <input id="data_inizio" type="date" name="data_inizio" class="form-control" value="{{ data_inizio|default:'' }}">
+                            <label for="data_inizio" class="form-label">Data Inizio</label>
+                            <input type="date" id="data_inizio" name="data_inizio" class="form-control" value="{{ data_inizio|default:'' }}">
                         </div>
                         <div class="mb-3">
-                            <label for="data_fine" class="form-label">Data Fine:</label>
-                            <input id="data_fine" type="date" name="data_fine" class="form-control" value="{{ data_fine|default:'' }}">
+                            <label for="data_fine" class="form-label">Data Fine</label>
+                            <input type="date" id="data_fine" name="data_fine" class="form-control" value="{{ data_fine|default:'' }}">
                         </div>
                         <div class="mb-3">
-                            <label for="stanza" class="form-label">Stanza:</label>
-                            <input id="stanza" type="text" name="stanza" class="form-control" value="{{ stanza|default:'' }}">
+                            <label for="stanza" class="form-label">Stanza</label>
+                            <input type="text" id="stanza" name="stanza" class="form-control" value="{{ stanza|default:'' }}">
                         </div>
-                    </div>
                     {% elif tipo == "Riabilitazione" %}
-                    <div id="campi_riabilitazione">
-                        <h5>Campi Riabilitazione</h5>
+                        <h4>Dettagli Riabilitazione</h4>
                         <div class="mb-3">
-                            <label for="durata" class="form-label">Durata (giorni):</label>
-                            <input id="durata" type="number" name="durata" class="form-control" value="{{ durata|default:'' }}">
+                            <label for="durata" class="form-label">Durata (giorni)</label>
+                            <input type="number" id="durata" name="durata" class="form-control" value="{{ durata|default:'' }}">
                         </div>
-                    </div>
                     {% endif %}
 
-                    <div class="d-grid">
-                        <button type="submit" name="aggiungi" class="btn btn-custom">Aggiungi</button>
+                    <div class="d-flex justify-content-center">
+                        <button type="submit" class="btn btn-custom mx-2">Aggiungi Trattamento</button>
+                        <a href="{% url 'lista_trattamenti_amministratore' %}" class="btn btn-secondary">Annulla</a>
                     </div>
+                <br/>
                 </form>
             </div>
         </div>
     </div>
 </div>
-
 {% endblock %}

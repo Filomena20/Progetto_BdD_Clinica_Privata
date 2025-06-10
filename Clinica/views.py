@@ -67,12 +67,13 @@ def registrazione_paziente(request):
             data_nascita = datetime.strptime(data_nascita_str, '%Y-%m-%d').date()
         except ValueError:
             return render(request, 'registrazione_paziente.html', {
-                'error_message': "Data non valida deve essere in formato Y-M-D"
+                'error': "Data non valida deve essere in formato Y-M-D"
             })
 
         # print(email," : ", hashed_password)
         if Paziente.objects.filter(email=email).exists():
-            return render(request, 'registrazione_paziente.html', {'error_message': "Email già in uso"})
+            return render(request, 'registrazione_paziente.html',
+                          {'error': "Email già in uso"})
         else:
             paziente = Paziente.objects.create(
                 email=email,
@@ -88,19 +89,15 @@ def registrazione_paziente(request):
             )
 
             return render(request, 'area_riservata_paziente.html', {
-                'success_message': "Registrazione avvenuta con successo",
+                'success': "Registrazione avvenuta con successo",
                 'paziente': paziente
             })
     else:
-        return render(request, 'registrazione_paziente.html', {'error_message': "Metodo non valido"})
+        return render(request, 'registrazione_paziente.html', {'error': "Metodo non valido"})
 
 
 #LOGIN PAZIENTE
 def login_paziente(request):
-    # if not request.session.get('is_authenticated'):
-    #       return redirect('personale')
-    # cambiare in base alla mia funzionne di autenticazione
-
     if request.method == 'POST':
         email = request.POST.get('email')
         password = request.POST.get('password')
@@ -112,10 +109,11 @@ def login_paziente(request):
             return redirect('area_riservata_paziente')
         else:
             return render(request, 'login_paziente.html',
-                          {'error_message': "Credenziali non valide, riprova",
+                          {'error': "Credenziali non valide, riprova",
                            'email': email})
     else:
         return render(request, 'login_paziente.html')
+
 
 
 #LOGIN PERSONALE
@@ -131,7 +129,7 @@ def login_personale(request):
             return redirect('area_riservata_personale')
         else:
             return render(request, 'login_personale.html',
-                          {'error_message': "Credenziali non valide, riprova",
+                          {'error': "Credenziali non valide, riprova",
                            'email': email})
     else:
         return render(request, 'login_personale.html')
@@ -592,9 +590,16 @@ def visualizza_cartella_paziente(request):
         messages.info(request, "Non è stata trovata alcuna cartella clinica associata.")
         cartella = None
 
+    # Prendi le prenotazioni completate (trattamenti effettuati)
+    trattamenti_completati = Prenotazione.objects.filter(
+    paziente=paziente,
+    stato=Prenotazione.Stato.CONFERMATA
+
+    ).order_by('-data', '-ora')
     context = {
         'paziente': paziente,
         'cartella': cartella,
+        'trattamenti_completati': trattamenti_completati,
     }
 
     return render(request, 'cartella_clinica.html', context)
@@ -693,8 +698,7 @@ def visualizza_prenotazioni_paziente(request):
         paziente=paziente,
         stato__in=[
             Prenotazione.Stato.RICHIESTA,
-            Prenotazione.Stato.CONFERMATA,
-            Prenotazione.Stato.MODIFICATA
+            Prenotazione.Stato.CONFERMATA
         ]
     ).order_by('data', 'ora')
 
@@ -769,8 +773,7 @@ def crea_prenotazione(request):
             data=data,
             stato__in=[
                 Prenotazione.Stato.RICHIESTA,
-                Prenotazione.Stato.CONFERMATA,
-                Prenotazione.Stato.MODIFICATA
+                Prenotazione.Stato.CONFERMATA
             ]
         ).values_list('ora', flat=True)
 
@@ -794,14 +797,13 @@ def crea_prenotazione(request):
                 'orari_disponibili': orari_disponibili
             })
 
-        # 🔍 Trova personale disponibile (nessuna altra prenotazione a quell'ora)
+        #  Trova personale disponibile (nessuna altra prenotazione a quell'ora)
         personale_disponibile = Personale.objects.exclude(
             prenotazione__data=data,
             prenotazione__ora=ora,
             prenotazione__stato__in=[
                 Prenotazione.Stato.RICHIESTA,
-                Prenotazione.Stato.CONFERMATA,
-                Prenotazione.Stato.MODIFICATA
+                Prenotazione.Stato.CONFERMATA
             ]
         ).first()
 
@@ -831,8 +833,7 @@ def crea_prenotazione(request):
         data=oggi,
         stato__in=[
             Prenotazione.Stato.RICHIESTA,
-            Prenotazione.Stato.CONFERMATA,
-            Prenotazione.Stato.MODIFICATA
+            Prenotazione.Stato.CONFERMATA
         ]
     ).values_list('ora', flat=True)
 
