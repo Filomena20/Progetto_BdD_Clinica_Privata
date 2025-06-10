@@ -45,7 +45,8 @@
                         <select name="ora" id="ora" class="form-select" required>
                             <option value="" disabled selected>Seleziona un orario</option>
                             {% for orario in orari_disponibili %}
-                                <option value="{{ orario|time:'H:i' }}">{{ orario|time:"H:i" }}</option>
+                                <option value="{{ orario|time:'H:i' }}">{{ orario|time:'H:i' }}</option>
+
                             {% endfor %}
                         </select>
                     </div>

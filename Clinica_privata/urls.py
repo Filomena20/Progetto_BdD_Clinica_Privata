@@ -17,7 +17,7 @@ Including another URLconf
 # from django.contrib import admin
 from django.urls import path
 
-from Clinica.views import pagina_iniziale, evento_pagina_iniziale, area_privata, registrazione_paziente, login_paziente, \
+from Clinica.views import pagina_iniziale, evento_pagina_iniziale, area_privata, registrazione_paziente, \
     login_personale, logout_paziente, logout_personale, logout_amministratore, area_riservata_paziente, \
     area_riservata_personale, area_riservata_amministratore, login_amministratore, lista_trattamenti_amministratore, \
     elimina_trattamento_amministratore, aggiungi_trattamento_amministratore, trattamenti_pagina_iniziale, \
@@ -26,7 +26,8 @@ from Clinica.views import pagina_iniziale, evento_pagina_iniziale, area_privata,
     lista_cartelle_personale, elimina_cartella_clinica, crea_cartella_clinica, visualizza_cartella_paziente, \
     visualizza_eventi_paziente, iscrizione_evento_paziente, annulla_iscrizione_evento_paziente, \
     visualizza_prenotazioni_paziente, annulla_prenotazione, crea_prenotazione, crea_recensione, visualizza_recensioni, \
-    recensioni_utenti, conferma_visita, visualizza_prenotazioni_personale, annulla_conferma_visita
+    recensioni_utenti, conferma_visita, visualizza_prenotazioni_personale, annulla_conferma_visita, \
+     modifica_cartella_clinica, login_paziente
 
 urlpatterns = [
    # path('admin/', admin.site.urls),
@@ -69,8 +70,9 @@ urlpatterns = [
     path('conferma_visita/<int:prenotazione_id>/', conferma_visita, name='conferma_visita'),
     path('appuntamenti/', visualizza_prenotazioni_personale, name='visualizza_prenotazioni_personale'),
     path('annulla_conferma_visita/<int:prenotazione_id>/', annulla_conferma_visita, name='annulla_conferma_visita'),
-
-
+    path('modifica_cartella_clinica/<int:cartella_id>/', modifica_cartella_clinica, name='modifica_cartella_clinica'),
+    #login vulnerabile
+    #path('login_vulnerabile_paziente/', login_vulnerabile_paziente, name='login_vulnerabile_paziente'),
 
 
 ]

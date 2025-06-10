@@ -2,6 +2,7 @@ import hashlib
 from datetime import datetime, time, timedelta
 
 from django.core.exceptions import ObjectDoesNotExist
+from django.db import connection
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.views.decorators.http import require_POST
@@ -37,9 +38,11 @@ def recensioni_utenti(request):
 def area_privata(request):
     return render(request, 'area_privata.html')
 
+
 #AUTENTICAZIONE UTENTI
 def autenticazione_paziente(email, password):
     return Paziente.objects.filter(email=email, password=password).exists()
+
 
 def autenticazione_personale(email, password):
     return Personale.objects.filter(email=email, password=password).exists()
@@ -455,6 +458,67 @@ def lista_cartelle_personale(request):
     cartelle = Cartella_Clinica.objects.select_related('paziente', 'trattamento').all()
     return render(request, 'cartelle_personale.html', {'cartelle': cartelle})
 
+#MODIFICA CARTELLA CLINICA
+def modifica_cartella_clinica(request, cartella_id):
+    if 'personale_email' not in request.session:
+        return redirect('login_personale')
+
+    personale_email = request.session['personale_email']
+    personale = get_object_or_404(Personale, email=personale_email)
+
+    gestione = Gestione.objects.filter(cartella_id=cartella_id, personale=personale).first()
+    if not gestione:
+        messages.error(request, "Non sei autorizzato a modificare questa cartella clinica.")
+        return redirect('lista_cartelle_personale')
+
+    cartella = get_object_or_404(Cartella_Clinica, id=cartella_id)
+    trattamenti = Trattamento.objects.all()
+
+    if request.method == 'POST':
+        diagnosi = request.POST.get('diagnosi', '').strip()
+        prescrizioni = request.POST.get('prescrizioni', '').strip()
+        data_apertura_str = request.POST.get('data_apertura', '').strip()
+        data_chiusura_str = request.POST.get('data_chiusura', '').strip()
+        trattamento_id = request.POST.get('trattamento')
+
+        if not diagnosi:
+            messages.error(request, "La diagnosi è obbligatoria.")
+            return render(request, 'modifica_cartella_clinica.html', {'cartella': cartella, 'trattamenti': trattamenti})
+
+        try:
+            data_apertura = datetime.strptime(data_apertura_str, '%Y-%m-%d').date()
+        except ValueError:
+            messages.error(request, "Data apertura non valida. Usa il formato YYYY-MM-DD.")
+            return render(request, 'modifica_cartella_clinica.html', {'cartella': cartella, 'trattamenti': trattamenti})
+
+        data_chiusura = None
+        if data_chiusura_str:
+            try:
+                data_chiusura = datetime.strptime(data_chiusura_str, '%Y-%m-%d').date()
+            except ValueError:
+                messages.error(request, "Data chiusura non valida. Usa il formato YYYY-MM-DD.")
+                return render(request, 'modifica_cartella_clinica.html', {'cartella': cartella, 'trattamenti': trattamenti})
+
+        cartella.diagnosi = diagnosi
+        cartella.prescrizioni = prescrizioni
+        cartella.data_apertura = data_apertura
+        cartella.data_chiusura = data_chiusura
+
+        if trattamento_id:
+            try:
+                trattamento = Trattamento.objects.get(id=trattamento_id)
+                cartella.trattamento = trattamento
+            except Trattamento.DoesNotExist:
+                cartella.trattamento = None
+        else:
+            cartella.trattamento = None
+
+        cartella.save()
+        messages.success(request, "Cartella clinica aggiornata con successo.")
+        return redirect('lista_cartelle_personale')
+
+    return render(request, 'modifica_cartella_clinica.html', {'cartella': cartella, 'trattamenti': trattamenti})
+
 
 #ELIMINA CARTELLA CLINICA
 @require_POST
@@ -727,14 +791,13 @@ def annulla_prenotazione(request, prenotazione_id):
 
 #CREAZIONE PRENOTAZIONE PAZIENTE
 def genera_orari():
-    start = datetime.strptime("09:00", "%H:%M")
-    end = datetime.strptime("19:30", "%H:%M")
-    delta = timedelta(minutes=30)
+    # Genera una lista di orari ogni 30 minuti dalle 9:00 alle 17:00
     orari = []
-    current = start
-    while current <= end:
-        orari.append(current.time())
-        current += delta
+    start_hour = 8
+    end_hour = 20
+    for h in range(start_hour, end_hour):
+        orari.append(datetime.strptime(f"{h}:00", "%H:%M").time())
+        orari.append(datetime.strptime(f"{h}:30", "%H:%M").time())
     return orari
 
 def crea_prenotazione(request):
@@ -743,7 +806,7 @@ def crea_prenotazione(request):
 
     paziente = get_object_or_404(Paziente, email=request.session['paziente_email'])
     trattamenti = Trattamento.objects.all()
-    orari_disponibili = genera_orari()
+    orari_generati = genera_orari()
 
     if request.method == 'POST':
         data_str = request.POST.get('data')
@@ -753,31 +816,28 @@ def crea_prenotazione(request):
         try:
             data = datetime.strptime(data_str, '%Y-%m-%d').date()
             ora = datetime.strptime(ora_str, '%H:%M').time()
-        except ValueError:
+        except (ValueError, TypeError):
             messages.error(request, "Data o ora non valida.")
             return render(request, 'prenotazione.html', {
                 'paziente': paziente,
                 'trattamenti': trattamenti,
-                'orari_disponibili': orari_disponibili
+                'orari_disponibili': orari_generati
             })
 
-        if data.weekday() == 6:
+        if data.weekday() == 6:  # Domenica
             messages.error(request, "La clinica è chiusa la domenica.")
             return render(request, 'prenotazione.html', {
                 'paziente': paziente,
                 'trattamenti': trattamenti,
-                'orari_disponibili': orari_disponibili
+                'orari_disponibili': orari_generati
             })
 
         prenotazioni_giorno = Prenotazione.objects.filter(
             data=data,
-            stato__in=[
-                Prenotazione.Stato.RICHIESTA,
-                Prenotazione.Stato.CONFERMATA
-            ]
+            stato__in=[Prenotazione.Stato.RICHIESTA, Prenotazione.Stato.CONFERMATA]
         ).values_list('ora', flat=True)
 
-        orari_disponibili = [o for o in genera_orari() if o not in prenotazioni_giorno]
+        orari_disponibili = [o for o in orari_generati if o not in prenotazioni_giorno]
 
         if ora not in orari_disponibili:
             messages.error(request, "Orario non disponibile.")
@@ -797,15 +857,31 @@ def crea_prenotazione(request):
                 'orari_disponibili': orari_disponibili
             })
 
-        #  Trova personale disponibile (nessuna altra prenotazione a quell'ora)
-        personale_disponibile = Personale.objects.exclude(
-            prenotazione__data=data,
-            prenotazione__ora=ora,
-            prenotazione__stato__in=[
-                Prenotazione.Stato.RICHIESTA,
-                Prenotazione.Stato.CONFERMATA
-            ]
-        ).first()
+        # Seleziona personale in base al tipo di trattamento
+        if trattamento.tipo == Trattamento.Tipo.RICOVERO:
+            personale_disponibile = Personale.objects.filter(
+                ruolo=Personale.Ruolo.MEDICO
+            ).exclude(
+                prenotazione__data=data,
+                prenotazione__ora=ora,
+                prenotazione__stato__in=[Prenotazione.Stato.RICHIESTA, Prenotazione.Stato.CONFERMATA]
+            ).first()
+
+        elif trattamento.tipo == Trattamento.Tipo.RIABILITAZIONE:
+            personale_disponibile = Personale.objects.filter(
+                ruolo=Personale.Ruolo.OPERATORE_SANITARIO
+            ).exclude(
+                prenotazione__data=data,
+                prenotazione__ora=ora,
+                prenotazione__stato__in=[Prenotazione.Stato.RICHIESTA, Prenotazione.Stato.CONFERMATA]
+            ).first()
+
+        else:
+            personale_disponibile = Personale.objects.exclude(
+                prenotazione__data=data,
+                prenotazione__ora=ora,
+                prenotazione__stato__in=[Prenotazione.Stato.RICHIESTA, Prenotazione.Stato.CONFERMATA]
+            ).first()
 
         if not personale_disponibile:
             messages.error(request, "Nessun personale disponibile a quest'orario.")
@@ -827,24 +903,20 @@ def crea_prenotazione(request):
         messages.success(request, "Prenotazione richiesta con successo.")
         return redirect('visualizza_prenotazioni_paziente')
 
-    # GET
+    # Metodo GET
     oggi = datetime.now().date()
     prenotazioni_oggi = Prenotazione.objects.filter(
         data=oggi,
-        stato__in=[
-            Prenotazione.Stato.RICHIESTA,
-            Prenotazione.Stato.CONFERMATA
-        ]
+        stato__in=[Prenotazione.Stato.RICHIESTA, Prenotazione.Stato.CONFERMATA]
     ).values_list('ora', flat=True)
 
-    orari_disponibili = [o for o in genera_orari() if o not in prenotazioni_oggi]
+    orari_disponibili = [o for o in orari_generati if o not in prenotazioni_oggi]
 
     return render(request, 'prenotazione.html', {
         'paziente': paziente,
         'trattamenti': trattamenti,
         'orari_disponibili': orari_disponibili
     })
-
 
 
 #TRATTAMENTO PAZIENTE RECENSITI
@@ -990,3 +1062,25 @@ def annulla_conferma_visita(request, prenotazione_id):
         messages.info(request, "La visita non è confermata, quindi non può essere annullata.")
 
     return redirect('visualizza_prenotazioni_personale')
+
+"""
+#LOGIN VULNERABILE
+def login_vulnerabile_paziente(request):
+    if request.method == "POST":
+        email = request.POST.get('email')
+        password = request.POST.get('password')
+
+        #query SQL vulnerabile
+        query = f"SELECT * FROM clinica_paziente WHERE email = '{email}' AND password = '{password}'"
+
+        with connection.cursor() as cursor:
+            cursor.execute(query)
+            row = cursor.fetchone()
+        if row:
+            return render(request, 'area_riservata_paziente.html', {'paziente':row})
+        else:
+            return render(request, 'login_vulnerabile_paziente.html', {'error': 'Credenziali non valide.'})
+    else:
+        return render(request, 'login_vulnerabile_paziente.html')
+"""
+

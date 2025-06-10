@@ -53,7 +53,9 @@
                                 {% csrf_token %}
                                 <button type="submit" class="btn btn-danger btn-sm">Elimina</button>
                             </form>
+                            <a href="{% url 'modifica_cartella_clinica' cartella.id %}" class="btn btn-custom mx-2"> Modifica</a>
                         </td>
+
                     </tr>
                     {% empty %}
                     <tr><td colspan="7">Nessuna cartella trovata.</td></tr>

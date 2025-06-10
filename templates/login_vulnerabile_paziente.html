@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Login Paziente{% endblock %}
+
+{% block content %}
+<br/>
+    <div class="clinic-logo-text">
+           <a href="{% url 'area_privata' %}" class="text-decoration-none text-reset">⭠ Indietro</a>
+    </div>
+<br/>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="card-title text-center mb-4">Login Paziente</h2>
+
+                <form method="POST">
+                    {% csrf_token %}
+
+                    {% if error %}
+                        <div class="alert alert-danger">{{ error }}</div>
+                    {% endif %}
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email:</label>
+                        <input type="text" class="form-control" id="email" name="email" required>
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password:</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="d-grid mb-3">
+                        <button type="submit" class="btn btn-custom mx-2">Login</button>
+                    </div>
+                </form>
+
+
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+
+
+
+
+
