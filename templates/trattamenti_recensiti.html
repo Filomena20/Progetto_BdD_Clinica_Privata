@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 
 {% block title %}Le Tue Recensioni{% endblock %}
 
@@ -8,11 +9,18 @@
     <a href="{% url 'area_riservata_paziente' %}" class="text-decoration-none text-reset">⭠ Indietro</a>
     <a href="{% url 'logout_paziente' %}" class="btn btn-custom mx-2">Logout</a>
 </div>
+
 <div class="row justify-content-center">
     <div class="col-md-6">
         <div class="card shadow-sm">
             <div class="card-body">
                 <h1>Le Tue Recensioni</h1>
+
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
 
                 {% if recensioni %}
                   <div class="list-group">
@@ -23,13 +31,18 @@
                           Valutazione:
                           {% for i in "12345" %}
                             {% if forloop.counter <= recensione.valutazione %}
-                              <span style="color: gold;">&#9733;</span> {# stella piena #}
+                              <span style="color: gold;">&#9733;</span>
                             {% else %}
-                              <span style="color: lightgray;">&#9733;</span> {# stella vuota #}
+                              <span style="color: lightgray;">&#9733;</span>
                             {% endif %}
                           {% endfor %}
                         </p>
                         <p>{{ recensione.testo }}</p>
+
+                        <form method="post" action="{% url 'elimina_recensione_paziente' recensione.id %}">
+                          {% csrf_token %}
+                          <button type="submit" class="btn btn-danger btn-sm">Elimina</button>
+                        </form>
                       </div>
                     {% endfor %}
                   </div>
@@ -38,12 +51,12 @@
                 {% endif %}
             </div>
         </div>
-            <div class="text-center mt-4">
-                <a href="{% url 'crea_recensione' %}" class="btn btn-custom mx-2">Nuova Recensione</a>
-            </div>
+
+        <div class="text-center mt-4">
+            <a href="{% url 'crea_recensione' %}" class="btn btn-custom mx-2">Nuova Recensione</a>
+        </div>
     </div>
 </div>
 
 <br/>
-
 {% endblock %}

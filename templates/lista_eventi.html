@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load static %}
 
 {% block title %}Lista Eventi Amministratore{% endblock %}
 
@@ -18,24 +17,22 @@
         {% endfor %}
     </div>
 {% endif %}
+
 <div class="container my-5">
     <h2 class="text-center mb-4">Lista Eventi</h2>
     <div class="row justify-content-center">
-        <div class="col-md-6">
+        <div class="col-md-8">
             <table class="table text-center">
                 <thead>
-                        <thead>
-                            <tr>
-                              <th>Data</th>
-                              <th>Titolo</th>
-                              <th>Descrizione</th>
-                              <th>Presenze Effettive</th>
-                              <th>Azioni</th>
-                            </tr>
-                        </thead>
+                    <tr>
+                      <th>Data</th>
+                      <th>Titolo</th>
+                      <th>Descrizione</th>
+                      <th>Presenze Effettive</th>
+                      <th>Azioni</th>
+                    </tr>
                 </thead>
-
-
+                <tbody>
                 {% for evento in eventi %}
                     <tr>
                       <td>{{ evento.data }}</td>
@@ -43,6 +40,8 @@
                       <td>{{ evento.descrizione }}</td>
                       <td>{{ evento.presenze_effettive }}</td>
                       <td>
+                        <a href="{% url 'aggiorna_presenze' evento.id %}" class="btn btn-primary btn-sm">Aggiorna Presenze</a>
+
                         <form method="post" action="{% url 'elimina_evento_amministratore' evento.id %}" style="display:inline;">
                             {% csrf_token %}
                             <button type="submit" class="btn btn-danger btn-sm">Elimina</button>
@@ -50,19 +49,16 @@
                       </td>
                     </tr>
                 {% empty %}
-                <tr><td colspan="5">Nessun evento trovato</td></tr>
+                    <tr><td colspan="5">Nessun evento trovato</td></tr>
                 {% endfor %}
+                </tbody>
             </table>
 
-        <div class="text-center my-3">
-          <a href="{% url 'aggiungi_evento_amministratore' %}" class="btn btn-custom mx-2">Aggiungi nuovo Evento</a>
-        </div>
-
+            <div class="text-center my-3">
+                <a href="{% url 'aggiungi_evento_amministratore' %}" class="btn btn-custom mx-2">Aggiungi nuovo Evento</a>
+            </div>
         </div>
     </div>
 </div>
 
 {% endblock %}
-
-
-

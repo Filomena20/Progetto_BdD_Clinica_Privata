@@ -40,23 +40,38 @@
                     <p><strong>Data apertura:</strong> {{ cartella.data_apertura|date:"d/m/Y" }}</p>
                     <p><strong>Diagnosi:</strong> {{ cartella.diagnosi }}</p>
                     <p><strong>Prescrizioni:</strong> {{ cartella.prescrizioni }}</p>
-                    <p><strong>Trattamenti:</strong> {{ cartella.trattamento }}</p>
+                    <p><strong>Trattamenti:</strong> {{ cartella.trattamento.nome }}</p>
                     <p><strong>Data chiusura:</strong> {{ cartella.data_chiusura|date:"d/m/Y"|default:"-" }}</p>
 
                     <hr>
                     <h4>Storico Trattamenti</h4>
-                    {% if trattamenti_completati %}
-                    <ul>
-                        {% for trattamento in trattamenti_completati %}
-                            <li>
-                                {{ trattamento.data }} {{ trattamento.ora }} -
-                                {{ trattamento.prestazione }} ({{ trattamento.stato }})
-                            </li>
-                        {% endfor %}
-                    </ul>
-                    {% else %}
-                        <p>Nessun trattamento completato trovato.</p>
-                    {% endif %}
+                        {% if trattamenti_completati %}
+                            <table class="table table-striped mt-2">
+                                <thead>
+                                    <tr>
+                                        <th>Data</th>
+                                        <th>Ora</th>
+                                        <th>Trattamento</th>
+                                        <th>Note</th>
+                                        <th>Personale</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for prenotazione in trattamenti_completati %}
+                                    <tr>
+                                        <td>{{ prenotazione.data }}</td>
+                                        <td>{{ prenotazione.ora }}</td>
+                                        <td>{{ prenotazione.trattamento.nome }}</td>
+                                        <td>{{ prenotazione.trattamento.note }}</td>
+                                        <td>{{ prenotazione.personale.nome }} {{ prenotazione.personale.cognome }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        {% else %}
+                            <p>Nessun trattamento completato trovato.</p>
+                        {% endif %}
+
                   </div>
             </div>
         </div>

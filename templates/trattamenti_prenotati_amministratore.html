@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+
+{% block title %}Trattamenti Prenotati{% endblock %}
+
+{% block content %}
+<br/>
+<div class="clinic-logo-text d-flex justify-content-between align-items-center">
+    <a href="{% url 'area_riservata_amministratore' %}" class="text-decoration-none text-reset">⭠ Indietro</a>
+    <a href="{% url 'logout_amministratore' %}" class="btn btn-custom mx-2">Logout</a>
+</div>
+
+<div class='row justify-content-center'>
+    <div class="col-md-6 text-center">
+        <h2 class="mt-4 mb-3">Trattamenti Prenotati</h2>
+    </div>
+</div>
+
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Trattamento</th>
+            <th>Tipo</th>
+            <th>Paziente</th>
+            <th>Personale</th>
+            <th>Data</th>
+            <th>Ora</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for d in dati %}
+        <tr>
+            <td>{{ d.trattamento_nome }}</td>
+            <td>{{ d.tipo }}</td>
+            <td>{{ d.paziente }}</td>
+            <td>{{ d.personale }}</td>
+            <td>{{ d.data }}</td>
+            <td>{{ d.ora }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="6" class="text-center">Nessuna prenotazione trovata.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

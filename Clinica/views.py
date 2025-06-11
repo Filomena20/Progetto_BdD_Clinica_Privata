@@ -1,11 +1,15 @@
 import hashlib
 from datetime import datetime, time, timedelta
+from io import BytesIO
 
 from django.core.exceptions import ObjectDoesNotExist
 from django.db import connection
+from django.http import HttpResponse
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
+from reportlab.pdfgen import canvas
 
 from Clinica.models import Evento, Paziente, Personale, Amministratore_Clinica, Trattamento, Iscrizione, \
     Cartella_Clinica, Gestione, Prenotazione, Recensione, Svolgimento
@@ -366,6 +370,30 @@ def aggiungi_evento_amministratore(request):
 
     return render(request, 'aggiungi_evento.html')
 
+#AGGIORNA PRESENZE EVENTO
+def aggiorna_presenze(request, evento_id):
+    if 'amministratore_email' not in request.session:
+        return redirect('login_amministratore')
+
+    evento = get_object_or_404(Evento, id=evento_id)
+    iscrizioni = Iscrizione.objects.filter(evento=evento, stato=Iscrizione.Stato.ISCRITTO)
+
+    if request.method == 'POST':
+        presenti_ids = request.POST.getlist('presente')
+        for iscrizione in iscrizioni:
+            iscrizione.presente = str(iscrizione.id) in presenti_ids
+            iscrizione.save()
+
+        messages.success(request, "Presenze aggiornate con successo.")
+        return redirect('lista_eventi_amministratore')
+
+    return render(request, 'aggiorna_presenze.html', {
+        'evento': evento,
+        'iscrizioni': iscrizioni,
+    })
+
+
+
 
 #VISUALIZZA EVENTO PERSONALE
 def visualizza_eventi_personale(request):
@@ -655,11 +683,13 @@ def visualizza_cartella_paziente(request):
         cartella = None
 
     # Prendi le prenotazioni completate (trattamenti effettuati)
-    trattamenti_completati = Prenotazione.objects.filter(
-    paziente=paziente,
-    stato=Prenotazione.Stato.CONFERMATA
-
+    trattamenti_completati = Prenotazione.objects.select_related(
+        'trattamento', 'personale'
+    ).filter(
+        paziente=paziente,
+        stato=Prenotazione.Stato.CONFERMATA
     ).order_by('-data', '-ora')
+
     context = {
         'paziente': paziente,
         'cartella': cartella,
@@ -918,6 +948,34 @@ def crea_prenotazione(request):
         'orari_disponibili': orari_disponibili
     })
 
+#CREA PDF PRENOTAZIONE
+def pdf_prenotazione(request, prenotazione_id):
+    prenotazione = get_object_or_404(Prenotazione, id=prenotazione_id)
+
+    buffer = BytesIO()
+    p = canvas.Canvas(buffer)
+
+    p.setFont("Helvetica-Bold", 16)
+    p.drawString(100, 800, "Riepilogo Prenotazione Clinica Privata")
+
+    p.setFont("Helvetica", 12)
+    p.drawString(100, 760, f"Paziente: {prenotazione.paziente.nome} {prenotazione.paziente.cognome}")
+    p.drawString(100, 740, f"Data: {prenotazione.data.strftime('%d/%m/%Y')}")
+    p.drawString(100, 720, f"Orario: {prenotazione.ora.strftime('%H:%M')}")
+    p.drawString(100, 700, f"Trattamento: {prenotazione.trattamento.nome}")
+    p.drawString(100, 680, f"Personale assegnato: {prenotazione.personale.nome} {prenotazione.personale.cognome}")
+
+    p.drawString(100, 640, "Grazie per aver scelto la nostra clinica!")
+
+    p.showPage()
+    p.save()
+
+    buffer.seek(0)
+    response = HttpResponse(buffer, content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="prenotazione_{prenotazione.id}.pdf"'
+    return response
+
+
 
 #TRATTAMENTO PAZIENTE RECENSITI
 def visualizza_recensioni(request):
@@ -979,9 +1037,23 @@ def crea_recensione(request):
             testo=commento
         )
         messages.success(request, "Recensione salvata con successo.")
-        return redirect('visualizza_recensioni')
+        return redirect('trattamenti_recensiti')
 
     return render(request, 'recensione.html', {'trattamenti': trattamenti_da_recensire})
+
+
+#ELIMINA RECENSION EPAZIENTE
+@require_POST
+def elimina_recensione_paziente(request, recensione_id):
+    if 'paziente_email' not in request.session:
+        return redirect('login_paziente')
+
+    paziente = get_object_or_404(Paziente, email=request.session['paziente_email'])
+    recensione = get_object_or_404(Recensione, id=recensione_id, paziente=paziente)
+
+    recensione.delete()
+    messages.success(request, "Recensione eliminata con successo.")
+    return redirect('trattamenti_recensiti')
 
 
 #CONFERMA PRENOTAZIONE PERSONALE
@@ -1065,6 +1137,7 @@ def annulla_conferma_visita(request, prenotazione_id):
 
 """
 #LOGIN VULNERABILE
+@csrf_exempt
 def login_vulnerabile_paziente(request):
     if request.method == "POST":
         email = request.POST.get('email')
@@ -1084,3 +1157,25 @@ def login_vulnerabile_paziente(request):
         return render(request, 'login_vulnerabile_paziente.html')
 """
 
+def trattamenti_prenotati_amministratore(request):
+    if 'amministratore_email' not in request.session:
+        return redirect('login_amministratore')
+
+    svolgimenti = Svolgimento.objects.select_related('trattamento', 'personale')
+    prenotazioni = Prenotazione.objects.select_related('paziente', 'trattamento')
+
+    dati = []
+    for prenotazione in prenotazioni:
+        # Cerca chi svolge il trattamento
+        svolgente = svolgimenti.filter(trattamento=prenotazione.trattamento).first()
+        if svolgente:
+            dati.append({
+                'trattamento_nome': prenotazione.trattamento.nome,
+                'paziente': f"{prenotazione.paziente.nome} {prenotazione.paziente.cognome}",
+                'personale': f"{svolgente.personale.nome} {svolgente.personale.cognome}",
+                'data': prenotazione.data,
+                'ora': prenotazione.ora,
+                'tipo': prenotazione.trattamento.tipo,
+            })
+
+    return render(request, 'trattamenti_prenotati_amministratore.html', {'dati': dati})

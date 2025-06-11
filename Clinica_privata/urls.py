@@ -27,7 +27,8 @@ from Clinica.views import pagina_iniziale, evento_pagina_iniziale, area_privata,
     visualizza_eventi_paziente, iscrizione_evento_paziente, annulla_iscrizione_evento_paziente, \
     visualizza_prenotazioni_paziente, annulla_prenotazione, crea_prenotazione, crea_recensione, visualizza_recensioni, \
     recensioni_utenti, conferma_visita, visualizza_prenotazioni_personale, annulla_conferma_visita, \
-     modifica_cartella_clinica, login_paziente
+    modifica_cartella_clinica, trattamenti_prenotati_amministratore, elimina_recensione_paziente, \
+    pdf_prenotazione, aggiorna_presenze,  login_paziente
 
 urlpatterns = [
    # path('admin/', admin.site.urls),
@@ -37,7 +38,7 @@ urlpatterns = [
     path('recensioni/', recensioni_utenti, name='recensioni_utenti'),
     path('area_privata/', area_privata, name='area_privata'),
     path('registrazione_paziente/', registrazione_paziente, name='registrazione_paziente'),
-    path('login_paziente/', login_paziente, name='login_paziente'),
+
     path('login_personale/', login_personale, name='login_personale'),
     path('login_amministratore/', login_amministratore, name='login_amministratore'),
     path('logout_paziente/', logout_paziente, name='logout_paziente'),
@@ -67,10 +68,17 @@ urlpatterns = [
     path('crea_prenotazione/', crea_prenotazione, name='crea_prenotazione'),
     path('visualizza_recensioni/', visualizza_recensioni, name='trattamenti_recensiti'),
     path('crea_recensione/', crea_recensione, name='crea_recensione'),
+    path('elimina_recensione_paziente/<int:recensione_id>/', elimina_recensione_paziente, name='elimina_recensione_paziente'),
     path('conferma_visita/<int:prenotazione_id>/', conferma_visita, name='conferma_visita'),
     path('appuntamenti/', visualizza_prenotazioni_personale, name='visualizza_prenotazioni_personale'),
     path('annulla_conferma_visita/<int:prenotazione_id>/', annulla_conferma_visita, name='annulla_conferma_visita'),
     path('modifica_cartella_clinica/<int:cartella_id>/', modifica_cartella_clinica, name='modifica_cartella_clinica'),
+    path('trattamenti_prenotati_amministratore/', trattamenti_prenotati_amministratore, name='trattamenti_prenotati_amministratore'),
+    path('pdf/<int:prenotazione_id>/', pdf_prenotazione, name='pdf_prenotazione'),
+    path('aggiorna_presenze/<int:evento_id>/', aggiorna_presenze, name='aggiorna_presenze'),
+
+
+    path('login_paziente/', login_paziente, name='login_paziente'),
     #login vulnerabile
     #path('login_vulnerabile_paziente/', login_vulnerabile_paziente, name='login_vulnerabile_paziente'),
 
