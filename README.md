@@ -42,7 +42,7 @@ L'architettura basata sui ruoli **garantisce sicurezza e controllo degli accessi
 
 ### **Modellazione Dati**
 - **Modello E/R** progettato con generalizzazioni disgiunte e totali, garantendo una **struttura dati coerente e scalabile**.  
-![Modello_E/R](https://github.com/user-attachments/assets/470cf33d-2ecd-4549-a071-9cb11d54ec28)
+![Modello_E/R](https://github.com/user-attachments/assets/e435b765-9129-4f98-aca5-bac7ef4a4404)
 
 ---
 
