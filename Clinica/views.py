@@ -285,9 +285,9 @@ def aggiungi_trattamento_amministratore(request):
             gestore=amministratore
         )
 
-        # Salvataggio dati specifici in base al tipo (esempio: aggiungi attributi extra se modelli li supportano)
+        # Salvataggio dati specifici in base al tipo
         if tipo == "Ricovero":
-            # supponendo Trattamento abbia campi per ricovero, altrimenti devi creare modello correlato
+
             trattamento.data_inizio = data_inizio or None
             trattamento.data_fine = data_fine or None
             trattamento.stanza = stanza or ''
@@ -306,7 +306,7 @@ def aggiungi_trattamento_amministratore(request):
         messages.success(request, "Trattamento aggiunto con successo.")
         return redirect('lista_trattamenti_amministratore')
 
-    # Metodo GET: prendi tipo da querystring o metti default
+    # Metodo GET: prendi tipo
     context['tipo'] = request.GET.get('tipo', 'Ricovero')
 
     return render(request, 'aggiungi_trattamento.html', context)

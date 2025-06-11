@@ -44,7 +44,7 @@
                         <td>
                             <form method="post" action="{% url 'annulla_prenotazione' prenotazione.id %}" style="display:inline;">
                                 {% csrf_token %}
-                                <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Sei sicuro di voler annullare questa prenotazione?')">Annulla</button>
+                                <button type="submit" class="btn btn-danger btn-sm" >Annulla</button>
                             </form>
 
                             <a href="{% url 'pdf_prenotazione' prenotazione.id %}" target="_blank" class="btn btn-primary btn-sm ms-2">

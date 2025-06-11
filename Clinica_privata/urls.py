@@ -28,7 +28,7 @@ from Clinica.views import pagina_iniziale, evento_pagina_iniziale, area_privata,
     visualizza_prenotazioni_paziente, annulla_prenotazione, crea_prenotazione, crea_recensione, visualizza_recensioni, \
     recensioni_utenti, conferma_visita, visualizza_prenotazioni_personale, annulla_conferma_visita, \
     modifica_cartella_clinica, trattamenti_prenotati_amministratore, elimina_recensione_paziente, \
-    pdf_prenotazione, aggiorna_presenze,  login_paziente
+    pdf_prenotazione, aggiorna_presenze,   login_paziente
 
 urlpatterns = [
    # path('admin/', admin.site.urls),
