@@ -51,18 +51,36 @@ Per eseguire l’applicazione, è necessario:
 1. **Avere Python installato** nel proprio ambiente.  
 2. **Avere accesso a un server MySQL/MariaDB**, preferibilmente con phpMyAdmin.  
 3. **Clonare il progetto** nella propria directory locale.  
-```
-git clone https://github.com/tuo-utente/reviva-clinica.git
+```bash
+git clone https://github.com/Filomena20/Progetto_BdD_Clinica_Privata.git
 cd clinica
 ```
-4. **Installare i pacchetti richiesti** eseguendo:  
+4. **Creare e attivare un ambiente virtuale (consigliato)**
 ```bash
-   pip install django
-   pip install mysqlclient
+python -m venv env
+# Linux/macOS
+source env/bin/activate
+# Windows
+.\env\Scripts\activate
+```
+5. **Installare le dipendenze**
+```bash
+pip install -r requirements.txt
+```
+Se non si vuole usare il file requirements.txt, installare manualmente eseguendo:
+```bash
+   pip install django mysqlclient
 ```
 ---
-
 ## **Configurazione del Database**
+1. **Importare il database da dump SQL***
+Se disponi di un file `.sql` con il dump del database puoi importarlo nel tuo server MySQL/MariaDB.
+- Metodo 1: via phpMyAdmin
+* Accedi a phpMyAdmin
+* Crea un nuovo database 
+* Clicca su Importa e carica il file dump.sql
+
+2. **Configurazione Database su Django**
 All’interno del file settings.py del progetto Django, è necessario configurare correttamente la connessione al database MySQL/MariaDB. I parametri da inserire sono:
 ```
 DATABASES = {
@@ -76,9 +94,9 @@ DATABASES = {
     }
 }
 ```
-Il database può essere creato preventivamente via phpMyAdmin o tramite terminale, prima di eseguire le migrazioni.
 
 ---
+
 
 ## **Utilizzo**
 Dopo la configurazione, eseguire i seguenti comandi da terminale per applicare le migrazioni:
