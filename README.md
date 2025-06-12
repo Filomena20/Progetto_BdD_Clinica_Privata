@@ -42,7 +42,7 @@ L'architettura **garantisce sicurezza e controllo degli accessi**, oltre a offri
 
 ### **Modellazione Dati**
 - **Modello E/R** progettato con generalizzazioni disgiunte e totali, garantendo una **struttura dati coerente e scalabile**.  
-![Modello_E/R](https://github.com/user-attachments/assets/e435b765-9129-4f98-aca5-bac7ef4a4404)
+![Modello_E/R](https://github.com/user-attachments/assets/e9ecd5c1-9abb-4bed-bcd1-fa526afae3d5)
 
 ---
 
