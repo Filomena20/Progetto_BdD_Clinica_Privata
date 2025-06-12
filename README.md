@@ -53,7 +53,7 @@ Per eseguire l’applicazione, è necessario:
 3. **Clonare il progetto** nella propria directory locale.  
 ```bash
 git clone https://github.com/Filomena20/Progetto_BdD_Clinica_Privata.git
-cd clinica
+cd Progetto_BdD_Clinica_Privata
 ```
 4. **Creare e attivare un ambiente virtuale (consigliato)**
 ```bash
