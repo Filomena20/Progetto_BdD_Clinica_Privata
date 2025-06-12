@@ -75,10 +75,11 @@ pip install django mysqlclient
 ## **Configurazione del Database**
 1. **Importare il database da dump SQL***
 Se disponi di un file `.sql` con il dump del database puoi importarlo nel tuo server MySQL/MariaDB.
+
 Metodo 1: via phpMyAdmin
-* Accedi a phpMyAdmin
-* Crea un nuovo database 
-* Clicca su Importa e carica il file dump.sql
+- Accedi a phpMyAdmin
+- Crea un nuovo database 
+- Clicca su Importa e carica il file dump.sql
 
 2. **Configurazione Database su Django**
 All’interno del file settings.py del progetto Django, è necessario configurare correttamente la connessione al database MySQL/MariaDB. I parametri da inserire sono:
