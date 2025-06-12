@@ -100,7 +100,7 @@ def registrazione_paziente(request):
                 'paziente': paziente
             })
     else:
-        return render(request, 'registrazione_paziente.html', {'error': "Metodo non valido"})
+        return render(request, 'registrazione_paziente.html')
 
 
 #LOGIN PAZIENTE
@@ -964,7 +964,7 @@ def pdf_prenotazione(request, prenotazione_id):
     p = canvas.Canvas(buffer)
 
     p.setFont("Helvetica-Bold", 16)
-    p.drawString(100, 800, "Riepilogo Prenotazione Clinica Privata")
+    p.drawString(100, 800, "Riepilogo Prenotazione Clinica Privata «ReViva»")
 
     p.setFont("Helvetica", 12)
     p.drawString(100, 760, f"Paziente: {prenotazione.paziente.nome} {prenotazione.paziente.cognome}")
@@ -1187,5 +1187,5 @@ def trattamenti_prenotati_amministratore(request):
                 'tipo': prenotazione.trattamento.tipo,
                 'stato': prenotazione.stato,
             })
-
+#visualizza solo le prenotazioni confermate
     return render(request, 'trattamenti_prenotati_amministratore.html', {'dati': dati})
