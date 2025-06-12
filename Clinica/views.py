@@ -166,7 +166,7 @@ def login_amministratore(request):
 def logout_paziente(request):
     request.session.flush()
     return redirect('login_paziente')
-#request.session.pop('paziente_email', None)
+
 
 def logout_personale(request):
     request.session.flush()
@@ -320,10 +320,18 @@ def lista_eventi_amministratore(request):
 
     eventi = Evento.objects.all().order_by('data')
 
+    # Aggiungo a ogni evento il numero di iscritti con stato ISCRITTO
+    for evento in eventi:
+        evento.presenze_effettive = Iscrizione.objects.filter(
+            evento=evento,
+            stato=Iscrizione.Stato.ISCRITTO
+        ).count()
+
     return render(request, 'lista_eventi.html', {
         'eventi': eventi,
         'amministratore_email': amministratore_email
     })
+
 
 #ELIMINA EVENTO AMMINISTRATORE
 @require_POST
@@ -598,7 +606,7 @@ def crea_cartella_clinica(request):
             messages.error(request, "Data di apertura non valida, deve essere nel formato YYYY-MM-DD.")
             return render(request, 'crea_cartella_clinica.html', {'trattamenti': Trattamento.objects.all()})
 
-        # Validazione data chiusura (opzionale)
+        # Validazione data chiusura
         data_chiusura_str = request.POST.get('data_chiusura')
         data_chiusura = None
         if data_chiusura_str:
@@ -682,7 +690,7 @@ def visualizza_cartella_paziente(request):
         messages.info(request, "Non è stata trovata alcuna cartella clinica associata.")
         cartella = None
 
-    # Prendi le prenotazioni completate (trattamenti effettuati)
+    # Prendi le prenotazioni completate
     trattamenti_completati = Prenotazione.objects.select_related(
         'trattamento', 'personale'
     ).filter(
@@ -821,7 +829,7 @@ def annulla_prenotazione(request, prenotazione_id):
 
 #CREAZIONE PRENOTAZIONE PAZIENTE
 def genera_orari():
-    # Genera una lista di orari ogni 30 minuti dalle 9:00 alle 17:00
+    # Genera una lista di orari ogni 30 minuti dalle 8:00 alle 20:00
     orari = []
     start_hour = 8
     end_hour = 20
@@ -1126,7 +1134,7 @@ def annulla_conferma_visita(request, prenotazione_id):
         prenotazione.stato = Prenotazione.Stato.RICHIESTA  # o lo stato iniziale che usi
         prenotazione.save()
 
-        # Se vuoi, elimina anche lo svolgimento associato
+
         Svolgimento.objects.filter(personale=personale, trattamento=prenotazione.trattamento).delete()
 
         messages.success(request, "Conferma della visita annullata.")
@@ -1162,7 +1170,8 @@ def trattamenti_prenotati_amministratore(request):
         return redirect('login_amministratore')
 
     svolgimenti = Svolgimento.objects.select_related('trattamento', 'personale')
-    prenotazioni = Prenotazione.objects.select_related('paziente', 'trattamento')
+    prenotazioni = Prenotazione.objects.filter(stato__in=['confermata']).select_related('paziente', 'trattamento')
+
 
     dati = []
     for prenotazione in prenotazioni:
@@ -1176,6 +1185,7 @@ def trattamenti_prenotati_amministratore(request):
                 'data': prenotazione.data,
                 'ora': prenotazione.ora,
                 'tipo': prenotazione.trattamento.tipo,
+                'stato': prenotazione.stato,
             })
 
     return render(request, 'trattamenti_prenotati_amministratore.html', {'dati': dati})

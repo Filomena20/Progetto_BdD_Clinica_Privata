@@ -25,6 +25,7 @@
             <th>Personale</th>
             <th>Data</th>
             <th>Ora</th>
+            <th>Stato Prenotazione</th>
         </tr>
     </thead>
     <tbody>
@@ -36,6 +37,8 @@
             <td>{{ d.personale }}</td>
             <td>{{ d.data }}</td>
             <td>{{ d.ora }}</td>
+            <td>{{ d.stato }}</td>
+
         </tr>
         {% empty %}
         <tr>
