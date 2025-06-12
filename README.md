@@ -57,12 +57,23 @@ cd Progetto_BdD_Clinica_Privata
 ```
 4. **Creare e attivare un ambiente virtuale (consigliato)**
 ```bash
-python -m venv env
-# Linux/macOS
-source env/bin/activate
-# Windows
-.\env\Scripts\activate
+python -m venv venv
 ```
+Linux/macOS
+```
+source venv/bin/activate
+```
+Windows
+
+In cmd
+```
+venv\Scripts\activate.bat
+```
+In PowerShell
+```
+.\venv\Scripts\Activate.ps1
+```
+
 5. **Installare le dipendenze**
 ```bash
 pip install -r requirements.txt
