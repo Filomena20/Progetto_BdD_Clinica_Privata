@@ -19,12 +19,12 @@ L’intento è quello di **sostituire le attuali procedure cartacee** con un’a
 La piattaforma è progettata per rispondere in modo flessibile e modulare alle esigenze operative della clinica, offrendo funzionalità quali:
 - **Gestione centralizzata dei pazienti**, con storico clinico, allergie, patologie e trattamenti ricevuti.
 - **Cartelle cliniche elettroniche**, accessibili sia dal personale sanitario che dai pazienti.
-- **Prenotazione e gestione degli appuntamenti**, con visibilità sulla disponibilità del personale.
+- **Prenotazione e gestione degli appuntamenti**.
 - **Organizzazione di eventi sanitari e formativi**, aperti al pubblico o riservati al personale.
 - **Recensioni dei pazienti** sui trattamenti ricevuti.
 - **Interfaccia differenziata** per visitatori, pazienti, personale sanitario e amministratori, ciascuno con accesso a funzionalità specifiche.  
 
-L'architettura basata sui ruoli **garantisce sicurezza e controllo degli accessi**, oltre a offrire un’esperienza utente personalizzata.
+L'architettura **garantisce sicurezza e controllo degli accessi**, oltre a offrire un’esperienza utente personalizzata.
 
 ---
 
@@ -95,17 +95,17 @@ L'applicazione sarà accessibile all'indirizzo: http://localhost:8000.
 ![Pagina_iniziale](https://github.com/user-attachments/assets/cd324c27-7606-4bb6-81ad-bcdc3009fa0f)
 
 
-A questo punto è possibile creare utenti, gestire prenotazioni e accedere alle funzionalità disponibili in base al ruolo selezionato cliccando sul pulsante “Area Privata” al centro della pagina.
+A questo punto è possibile creare utenti, gestire prenotazioni e accedere alle funzionalità disponibili in base al profilo selezionato cliccando sul pulsante “Area Privata” al centro della pagina.
 
 **Homepage**:
 La homepage offre un accesso rapido alle principali funzionalità della clinica:
-- **Storia clinica**, per informare gli utenti sulla clinica e i suoi servizi.
+- **Storia clinica**, per informare gli utenti sulla clinica.
 - **Accesso all'area privata**, dove pazienti, personale e amministratore possono accedere.
 - **Orari e contatti**, per facilitare la comunicazione con la struttura.
 In alto a destra, gli utenti possono:
 - Consultare i trattamenti disponibili e prenotarli.
 - Visualizzare gli eventi e iscriversi.
-- Leggere le recensioni dei clienti sui trattamenti ricevuti.
+- Leggere le recensioni sui trattamenti.
 
 **Area Riservata:** L'applicazione prevede accessi differenziati in base al ruolo dell'utente:
 1. **Login Amministratore**
