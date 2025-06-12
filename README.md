@@ -1,6 +1,6 @@
 
 # **Sistema Informativo – Clinica Privata “ReViva”**
-Questo progetto nasce con l’obiettivo di progettare e implementare un sistema informativo moderno per la clinica privata **ReViva**, specializzata in ricoveri e trattamenti riabilitativi.  
+Questo lavoro nasce con l’obiettivo di progettare e implementare un sistema informativo moderno per la clinica privata **ReViva**, specializzata in ricoveri e trattamenti riabilitativi.  
 L’intento è quello di **sostituire le attuali procedure cartacee** con un’applicazione web intuitiva, capace di supportare il personale medico e amministrativo nella gestione quotidiana della struttura, migliorando **efficienza, sicurezza e accessibilità** ai dati sanitari.
 
 ---
