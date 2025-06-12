@@ -142,4 +142,5 @@ In alto a destra, gli utenti possono:
 ---
 
 ## **Licenza**
-Questo progetto è stato realizzato a scopo didattico.
+Questo progetto è stato realizzato e distribuito a scopo didattico con licenza [MIT](LICENSE).
+Puoi usarlo, modificarlo e distribuirlo liberamente, a patto che venga mantenuta la nota di copyright.
